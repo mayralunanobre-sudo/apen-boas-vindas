@@ -50,11 +50,11 @@ export async function GET(_req: Request, { params }: { params: { id: string } })
       })
       await browser.close()
       const pdfBuffer: Uint8Array = Buffer.from(pdfBytes)
-      return new NextResponse(pdfBuffer, {
+      return new Response(pdfBuffer, {
         status: 200,
         headers: {
           'Content-Type': 'application/pdf',
-          'Content-Disposition': `attachment; filename="carta-${carta.nome_colaborador.replace(/\s+/g, '-').toLowerCase()}.pdf"`,
+          'Content-Disposition': 'attachment; filename=carta.pdf',
         },
       })
     } catch (puppeteerErr) {
