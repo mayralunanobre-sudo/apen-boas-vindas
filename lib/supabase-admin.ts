@@ -1,19 +1,29 @@
-import { createClient } from '@supabase/supabase-js'
+import { createClient, type SupabaseClient } from '@supabase/supabase-js'
 
-function createAdminClient() {
-  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
-  const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY
-  if (!supabaseUrl || !supabaseServiceKey) {
-    throw new Error(
-      'Variáveis NEXT_PUBLIC_SUPABASE_URL e SUPABASE_SERVICE_ROLE_KEY são obrigatórias.'
-    )
+let _client: SupabaseClient | null = null
+
+function getClient(): SupabaseClient {
+  if (!_client) {
+    const url = process.env.NEXT_PUBLIC_SUPABASE_URL
+    const key = process.env.SUPABASE_SERVICE_ROLE_KEY
+    if (!url || !key) {
+      throw new Error(
+        'Configure NEXT_PUBLIC_SUPABASE_URL e SUPABASE_SERVICE_ROLE_KEY nas variáveis de ambiente da Vercel.'
+      )
+    }
+    _client = createClient(url, key, { auth: { persistSession: false } })
   }
-  return createClient(supabaseUrl, supabaseServiceKey, {
-    auth: { persistSession: false },
-  })
+  return _client
 }
 
-export const supabaseAdmin = createAdminClient()
+// Proxy lazy: o cliente só é criado na primeira requisição, nunca durante o build
+export const supabaseAdmin = new Proxy<SupabaseClient>({} as SupabaseClient, {
+  get(_target, prop: string | symbol) {
+    const c = getClient()
+    const val = (c as unknown as Record<string | symbol, unknown>)[prop]
+    return typeof val === 'function' ? (val as (...a: unknown[]) => unknown).bind(c) : val
+  },
+})
 
 export async function uploadFile(
   bucket: string,
