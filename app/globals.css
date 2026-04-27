@@ -1,0 +1,74 @@
+@import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;700&family=Inter:wght@300;400;500;600;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --apen-dark: #1a4a3a;
+    --apen-medium: #2d7a5f;
+    --apen-light: #4a9e7f;
+    --sticky: #fffacd;
+  }
+
+  body {
+    @apply bg-white text-gray-800;
+    font-family: 'Inter', sans-serif;
+  }
+
+  .font-cursive {
+    font-family: 'Dancing Script', cursive;
+  }
+}
+
+@layer components {
+  .btn-primary {
+    @apply bg-apen-dark text-white px-6 py-3 rounded-lg font-semibold hover:bg-apen-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed;
+  }
+
+  .btn-secondary {
+    @apply border-2 border-apen-dark text-apen-dark px-6 py-3 rounded-lg font-semibold hover:bg-apen-dark hover:text-white transition-colors;
+  }
+
+  .input-field {
+    @apply w-full border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-apen-medium focus:border-transparent transition-shadow;
+  }
+
+  .label {
+    @apply block text-sm font-semibold text-gray-700 mb-1;
+  }
+
+  .card {
+    @apply bg-white rounded-xl shadow-md p-6 border border-gray-100;
+  }
+
+  .sticky-note {
+    background: var(--sticky);
+    @apply border border-yellow-300 rounded p-4 shadow-md;
+  }
+
+  .section-title {
+    @apply font-cursive text-3xl text-apen-dark;
+  }
+
+  .avatar-circle {
+    @apply rounded-full object-cover border-4 border-apen-medium;
+  }
+}
+
+.upload-area {
+  @apply border-2 border-dashed border-apen-medium rounded-lg p-6 text-center cursor-pointer hover:bg-green-50 transition-colors;
+}
+
+.message-block-even {
+  @apply flex flex-row gap-4 items-start py-4 border-b border-gray-100;
+}
+
+.message-block-odd {
+  @apply flex flex-row-reverse gap-4 items-start py-4 border-b border-gray-100;
+}
+
+.contribution-card {
+  @apply bg-yellow-50 border border-yellow-200 rounded-lg p-4 shadow-sm hover:shadow-md transition-shadow;
+}
