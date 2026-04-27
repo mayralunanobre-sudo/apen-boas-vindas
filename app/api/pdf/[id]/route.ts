@@ -30,7 +30,7 @@ export async function GET(_req: Request, { params }: { params: { id: string } })
     const html = await generatePDFHTML(cartaCompleta, baseUrl)
 
     // Tenta usar puppeteer para gerar PDF server-side
-    let pdfBuffer: Buffer | null = null
+    let pdfBuffer: Uint8Array | null = null
     try {
       const puppeteer = await import('puppeteer')
       const browser = await puppeteer.default.launch({
@@ -44,13 +44,12 @@ export async function GET(_req: Request, { params }: { params: { id: string } })
       })
       const page = await browser.newPage()
       await page.setContent(html, { waitUntil: 'networkidle0', timeout: 30000 })
-      pdfBuffer = Buffer.from(
-        await page.pdf({
-          format: 'A4',
-          printBackground: true,
-          margin: { top: '0', right: '0', bottom: '0', left: '0' },
-        })
-      )
+      const pdfBytes = await page.pdf({
+        format: 'A4',
+        printBackground: true,
+        margin: { top: '0', right: '0', bottom: '0', left: '0' },
+      })
+      pdfBuffer = Buffer.from(pdfBytes)
       await browser.close()
     } catch (puppeteerErr) {
       console.error('Puppeteer error:', puppeteerErr)
