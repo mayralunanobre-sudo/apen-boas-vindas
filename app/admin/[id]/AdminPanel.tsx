@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, type FormEvent } from 'react'
 import Image from 'next/image'
 import type { CartaComContribuicoes, Contribuicao } from '@/lib/types'
 
@@ -16,7 +16,7 @@ export default function AdminPanel({ carta: initialCarta }: Props) {
   const [deletingId, setDeletingId] = useState<string | null>(null)
   const [movingId, setMovingId] = useState<string | null>(null)
 
-  async function handleLogin(e: React.FormEvent) {
+  async function handleLogin(e: FormEvent) {
     e.preventDefault()
     setAuthError('')
     try {

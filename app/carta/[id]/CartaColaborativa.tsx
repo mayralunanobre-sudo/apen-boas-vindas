@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, type FormEvent } from 'react'
 import Image from 'next/image'
 import type { Carta, Contribuicao } from '@/lib/types'
 
@@ -31,7 +31,7 @@ export default function CartaColaborativa({ carta }: Props) {
     else setNome('')
   }
 
-  async function handleSubmit(e: React.FormEvent) {
+  async function handleSubmit(e: FormEvent) {
     e.preventDefault()
     setLoading(true)
     setError('')

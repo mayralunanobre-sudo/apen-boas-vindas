@@ -1,5 +1,7 @@
 import { notFound } from 'next/navigation'
+import type { Metadata } from 'next'
 import type { CartaComContribuicoes } from '@/lib/types'
+import PrintButton from './PrintButton'
 
 const TULIO_MESSAGE = `O melhor começo de carreira do mundo é aquele que tem muito problema pra resolver. Por isso, garanto: vocês estão no lugar certo! Sei o quanto a Åpen pode marcar a carreira de cada um de vocês, contem comigo nessa jornada... Tenho certeza de que a curiosidade intelectual e a vontade de trabalhar vão fazer toda a diferença para o crescimento de vocês lá na frente. Sejam muito bem-vindos. Vamos juntos! Abraços!`
 
@@ -15,6 +17,38 @@ const APEN_VALUES = [
   'RESPONSABILIDADE COM OS SONHOS DOS CLIENTES E DO NOSSO TIME',
 ]
 
+const PRINT_CSS = `
+  .preview-root { font-family: 'Inter', sans-serif; background: #f5f5f5; min-height: 100vh; padding: 20px 0; }
+  .page {
+    width: 210mm;
+    min-height: 297mm;
+    padding: 14mm 16mm 20mm;
+    background: white;
+    margin: 20px auto;
+    position: relative;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+  }
+  @media print {
+    body { background: white !important; }
+    .preview-root { background: white; padding: 0; }
+    .page { margin: 0; box-shadow: none; page-break-after: always; }
+    .page:last-child { page-break-after: avoid; }
+    .no-print { display: none !important; }
+  }
+  @page { size: A4; margin: 0; }
+  .font-cursive { font-family: 'Dancing Script', cursive; }
+  .avatar { width: 90px; height: 90px; border-radius: 50%; object-fit: cover; border: 3px solid #2d7a5f; flex-shrink: 0; }
+  .avatar-sm { width: 80px; height: 80px; }
+  .avatar-placeholder { background: #d1e8de; display: flex; align-items: center; justify-content: center; font-size: 28px; }
+  .block-row { display: flex; gap: 14px; align-items: flex-start; padding: 14px 0; border-bottom: 1px solid #e8f0ed; }
+  .block-row-rev { flex-direction: row-reverse; }
+  .green-footer { background: #1a4a3a; color: white; position: absolute; bottom: 0; left: 0; right: 0; padding: 10px 16mm; display: flex; }
+  .value-item { flex: 1; text-align: center; font-size: 8px; font-weight: 600; padding: 4px 6px; border-right: 1px solid rgba(255,255,255,0.3); }
+  .value-item:last-child { border-right: none; }
+  .sticky-note { background: #fffacd; border: 1px solid #f0e070; border-radius: 4px; padding: 14px 18px; margin-bottom: 16px; box-shadow: 3px 3px 8px rgba(0,0,0,0.12); }
+  .family-card { background: #fffacd; border: 1px solid #f0e070; border-radius: 4px; padding: 12px; margin-bottom: 10px; box-shadow: 2px 2px 6px rgba(0,0,0,0.1); break-inside: avoid; }
+`
+
 async function getCarta(id: string): Promise<CartaComContribuicoes | null> {
   const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000'
   try {
@@ -24,6 +58,11 @@ async function getCarta(id: string): Promise<CartaComContribuicoes | null> {
   } catch {
     return null
   }
+}
+
+export async function generateMetadata({ params }: { params: { id: string } }): Promise<Metadata> {
+  const carta = await getCarta(params.id)
+  return { title: carta ? `Preview — ${carta.nome_colaborador}` : 'Preview' }
 }
 
 export default async function PreviewPage({ params }: { params: { id: string } }) {
@@ -41,151 +80,103 @@ export default async function PreviewPage({ params }: { params: { id: string } }
   ]
 
   return (
-    <html lang="pt-BR">
-      <head>
-        <meta charSet="UTF-8" />
-        <title>Preview — {carta.nome_colaborador}</title>
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
-        <style>{`
-          * { box-sizing: border-box; margin: 0; padding: 0; }
-          body { font-family: 'Inter', sans-serif; background: #f5f5f5; }
-          .page {
-            width: 210mm;
-            min-height: 297mm;
-            padding: 14mm 16mm 20mm;
-            background: white;
-            margin: 20px auto;
-            position: relative;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.15);
-          }
-          @media print {
-            body { background: white; }
-            .page { margin: 0; box-shadow: none; page-break-after: always; }
-            .page:last-child { page-break-after: avoid; }
-            .no-print { display: none !important; }
-          }
-          @page { size: A4; margin: 0; }
-          .font-cursive { font-family: 'Dancing Script', cursive; }
-          .avatar { width: 90px; height: 90px; border-radius: 50%; object-fit: cover; border: 3px solid #2d7a5f; flex-shrink: 0; }
-          .avatar-sm { width: 80px; height: 80px; }
-          .avatar-placeholder { background: #d1e8de; display: flex; align-items: center; justify-content: center; font-size: 28px; }
-          .block-row { display: flex; gap: 14px; align-items: flex-start; padding: 14px 0; border-bottom: 1px solid #e8f0ed; }
-          .block-row-rev { flex-direction: row-reverse; }
-          .green-footer { background: #1a4a3a; color: white; position: absolute; bottom: 0; left: 0; right: 0; padding: 10px 16mm; display: flex; }
-          .value-item { flex: 1; text-align: center; font-size: 8px; font-weight: 600; padding: 4px 6px; border-right: 1px solid rgba(255,255,255,0.3); }
-          .value-item:last-child { border-right: none; }
-          .sticky { background: #fffacd; border: 1px solid #f0e070; border-radius: 4px; padding: 14px 18px; margin-bottom: 16px; box-shadow: 3px 3px 8px rgba(0,0,0,0.12); }
-          .print-btn { position: fixed; top: 20px; right: 20px; background: #1a4a3a; color: white; border: none; padding: 12px 20px; border-radius: 8px; font-size: 14px; cursor: pointer; font-family: 'Inter', sans-serif; font-weight: 600; z-index: 100; }
-          .print-btn:hover { background: #2d7a5f; }
-        `}</style>
-      </head>
-      <body>
-        <button className="print-btn no-print" onClick={() => window.print()}>
-          🖨️ Imprimir / Salvar PDF
-        </button>
+    <div className="preview-root">
+      {/* eslint-disable-next-line react/no-danger */}
+      <style dangerouslySetInnerHTML={{ __html: PRINT_CSS }} />
+      <PrintButton />
 
-        {/* PÁGINA 1 */}
-        <div className="page">
-          {/* Cabeçalho */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: '18px', marginBottom: '16px', paddingBottom: '14px', borderBottom: '3px solid #1a4a3a' }}>
-            {carta.foto_colaborador_url ? (
-              // eslint-disable-next-line @next/next/no-img-element
-              <img src={carta.foto_colaborador_url} alt={carta.nome_colaborador} className="avatar" />
-            ) : (
-              <div className="avatar avatar-placeholder">👤</div>
-            )}
-            <div>
-              <div style={{ fontSize: '10px', textTransform: 'uppercase', letterSpacing: '2px', color: '#2d7a5f', fontWeight: 600 }}>Bem-vindo(a) à Åpen Capital</div>
-              <div className="font-cursive" style={{ fontSize: '38px', color: '#1a4a3a', lineHeight: 1.1 }}>{carta.nome_colaborador}</div>
-            </div>
-          </div>
-
-          {/* Sticky note Saulo */}
-          <div className="sticky">
-            <p style={{ fontSize: '11.5px', lineHeight: 1.7, color: '#444' }}>{SAULO_MESSAGE}</p>
-          </div>
-
-          {/* Blocos alternados */}
-          {blocks.map((b, i) => (
-            <div key={i} className={`block-row ${i % 2 !== 0 ? 'block-row-rev' : ''}`}>
-              {b.photo ? (
-                // eslint-disable-next-line @next/next/no-img-element
-                <img src={b.photo} alt={b.name} className="avatar avatar-sm" />
-              ) : (
-                <div className="avatar avatar-sm avatar-placeholder">👤</div>
-              )}
-              <div style={{ flex: 1 }}>
-                <div className="font-cursive" style={{ fontSize: '18px', color: '#1a4a3a', marginBottom: '2px' }}>{b.name}</div>
-                <div style={{ fontWeight: 700, textDecoration: 'underline', textDecorationColor: '#2d7a5f', fontSize: '12px', color: '#2d7a5f', marginBottom: '8px' }}>{b.role}</div>
-                <p style={{ fontSize: '12px', lineHeight: 1.6, color: '#333' }}>
-                  {b.message || <em style={{ color: '#999' }}>Mensagem ainda não enviada</em>}
-                </p>
-              </div>
-            </div>
-          ))}
-
-          {/* Rodapé */}
-          <div className="green-footer">
-            {APEN_VALUES.map((v, i) => (
-              <div key={i} className="value-item">{v}</div>
-            ))}
+      {/* PÁGINA 1 */}
+      <div className="page">
+        <div style={{ display: 'flex', alignItems: 'center', gap: '18px', marginBottom: '16px', paddingBottom: '14px', borderBottom: '3px solid #1a4a3a' }}>
+          {carta.foto_colaborador_url ? (
+            // eslint-disable-next-line @next/next/no-img-element
+            <img src={carta.foto_colaborador_url} alt={carta.nome_colaborador} className="avatar" />
+          ) : (
+            <div className="avatar avatar-placeholder">👤</div>
+          )}
+          <div>
+            <div style={{ fontSize: '10px', textTransform: 'uppercase', letterSpacing: '2px', color: '#2d7a5f', fontWeight: 600 }}>Bem-vindo(a) à Åpen Capital</div>
+            <div className="font-cursive" style={{ fontSize: '38px', color: '#1a4a3a', lineHeight: 1.1 }}>{carta.nome_colaborador}</div>
           </div>
         </div>
 
-        {/* PÁGINA 2 */}
-        <div className="page">
-          {/* Cabeçalho */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: '18px', marginBottom: '16px', paddingBottom: '14px', borderBottom: '3px solid #1a4a3a' }}>
-            {carta.foto_colaborador_url ? (
+        <div className="sticky-note">
+          <p style={{ fontSize: '11.5px', lineHeight: 1.7, color: '#444' }}>{SAULO_MESSAGE}</p>
+        </div>
+
+        {blocks.map((b, i) => (
+          <div key={i} className={`block-row${i % 2 !== 0 ? ' block-row-rev' : ''}`}>
+            {b.photo ? (
               // eslint-disable-next-line @next/next/no-img-element
-              <img src={carta.foto_colaborador_url} alt={carta.nome_colaborador} className="avatar avatar-sm" />
+              <img src={b.photo} alt={b.name} className="avatar avatar-sm" />
             ) : (
               <div className="avatar avatar-sm avatar-placeholder">👤</div>
             )}
-            <div>
-              <div className="font-cursive" style={{ fontSize: '32px', color: '#1a4a3a' }}>{carta.nome_colaborador}</div>
-              <div style={{ fontSize: '12px', color: '#2d7a5f', marginTop: '4px', fontStyle: 'italic' }}>{FAMILY_PHRASE}</div>
+            <div style={{ flex: 1 }}>
+              <div className="font-cursive" style={{ fontSize: '18px', color: '#1a4a3a', marginBottom: '2px' }}>{b.name}</div>
+              <div style={{ fontWeight: 700, textDecoration: 'underline', textDecorationColor: '#2d7a5f', fontSize: '12px', color: '#2d7a5f', marginBottom: '8px' }}>{b.role}</div>
+              <p style={{ fontSize: '12px', lineHeight: 1.6, color: '#333' }}>
+                {b.message ?? <em style={{ color: '#999' }}>Mensagem ainda não enviada</em>}
+              </p>
             </div>
           </div>
+        ))}
 
-          {/* Cards de família */}
-          {familyContribs.length === 0 ? (
-            <div style={{ textAlign: 'center', padding: '40px', color: '#999', fontStyle: 'italic' }}>
-              Ainda não há mensagens de família registradas.
-            </div>
+        <div className="green-footer">
+          {APEN_VALUES.map((v, i) => (
+            <div key={i} className="value-item">{v}</div>
+          ))}
+        </div>
+      </div>
+
+      {/* PÁGINA 2 */}
+      <div className="page">
+        <div style={{ display: 'flex', alignItems: 'center', gap: '18px', marginBottom: '16px', paddingBottom: '14px', borderBottom: '3px solid #1a4a3a' }}>
+          {carta.foto_colaborador_url ? (
+            // eslint-disable-next-line @next/next/no-img-element
+            <img src={carta.foto_colaborador_url} alt={carta.nome_colaborador} className="avatar avatar-sm" />
           ) : (
-            <div style={{ columns: 2, gap: '12px', marginBottom: '24px' }}>
-              {familyContribs.map((c) => (
-                <div key={c.id} style={{ background: '#fffacd', border: '1px solid #f0e070', borderRadius: '4px', padding: '12px', marginBottom: '10px', boxShadow: '2px 2px 6px rgba(0,0,0,0.1)', breakInside: 'avoid' }}>
-                  <div className="font-cursive" style={{ fontSize: '15px', color: '#1a4a3a', marginBottom: '6px' }}>{c.nome_remetente}</div>
-                  <p style={{ fontSize: '11px', lineHeight: 1.6, color: '#333' }}>{c.mensagem}</p>
-                </div>
-              ))}
-            </div>
+            <div className="avatar avatar-sm avatar-placeholder">👤</div>
           )}
-
-          {/* Fotos de família */}
-          {familyContribs.some(c => c.fotos_familia_urls?.length) && (
-            <div>
-              <h3 className="font-cursive" style={{ fontSize: '18px', color: '#1a4a3a', marginBottom: '12px' }}>Fotos da Família</h3>
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: '8px' }}>
-                {familyContribs.flatMap(c => c.fotos_familia_urls || []).map((url, i) => (
-                  // eslint-disable-next-line @next/next/no-img-element
-                  <img key={i} src={url} alt="Foto" style={{ width: '100%', height: '120px', objectFit: 'cover', borderRadius: '6px', border: '2px solid #2d7a5f' }} />
-                ))}
-              </div>
-            </div>
-          )}
-
-          {/* Rodapé */}
-          <div className="green-footer">
-            {APEN_VALUES.map((v, i) => (
-              <div key={i} className="value-item">{v}</div>
-            ))}
+          <div>
+            <div className="font-cursive" style={{ fontSize: '32px', color: '#1a4a3a' }}>{carta.nome_colaborador}</div>
+            <div style={{ fontSize: '12px', color: '#2d7a5f', marginTop: '4px', fontStyle: 'italic' }}>{FAMILY_PHRASE}</div>
           </div>
         </div>
-      </body>
-    </html>
+
+        {familyContribs.length === 0 ? (
+          <div style={{ textAlign: 'center', padding: '40px', color: '#999', fontStyle: 'italic' }}>
+            Ainda não há mensagens de família registradas.
+          </div>
+        ) : (
+          <div style={{ columns: 2, gap: '12px', marginBottom: '24px' }}>
+            {familyContribs.map((c) => (
+              <div key={c.id} className="family-card">
+                <div className="font-cursive" style={{ fontSize: '15px', color: '#1a4a3a', marginBottom: '6px' }}>{c.nome_remetente}</div>
+                <p style={{ fontSize: '11px', lineHeight: 1.6, color: '#333' }}>{c.mensagem}</p>
+              </div>
+            ))}
+          </div>
+        )}
+
+        {familyContribs.some((c) => c.fotos_familia_urls?.length) && (
+          <div>
+            <h3 className="font-cursive" style={{ fontSize: '18px', color: '#1a4a3a', marginBottom: '12px' }}>Fotos da Família</h3>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: '8px' }}>
+              {familyContribs.flatMap((c) => c.fotos_familia_urls ?? []).map((url, i) => (
+                // eslint-disable-next-line @next/next/no-img-element
+                <img key={i} src={url} alt="Foto" style={{ width: '100%', height: '120px', objectFit: 'cover', borderRadius: '6px', border: '2px solid #2d7a5f' }} />
+              ))}
+            </div>
+          </div>
+        )}
+
+        <div className="green-footer">
+          {APEN_VALUES.map((v, i) => (
+            <div key={i} className="value-item">{v}</div>
+          ))}
+        </div>
+      </div>
+    </div>
   )
 }

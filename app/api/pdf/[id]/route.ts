@@ -30,7 +30,6 @@ export async function GET(_req: Request, { params }: { params: { id: string } })
     const html = await generatePDFHTML(cartaCompleta, baseUrl)
 
     // Tenta usar puppeteer para gerar PDF server-side
-    let pdfBuffer: Uint8Array | null = null
     try {
       const puppeteer = await import('puppeteer')
       const browser = await puppeteer.default.launch({
@@ -49,8 +48,15 @@ export async function GET(_req: Request, { params }: { params: { id: string } })
         printBackground: true,
         margin: { top: '0', right: '0', bottom: '0', left: '0' },
       })
-      pdfBuffer = Buffer.from(pdfBytes)
       await browser.close()
+      const pdfBuffer: Uint8Array = Buffer.from(pdfBytes)
+      return new NextResponse(pdfBuffer, {
+        status: 200,
+        headers: {
+          'Content-Type': 'application/pdf',
+          'Content-Disposition': `attachment; filename="carta-${carta.nome_colaborador.replace(/\s+/g, '-').toLowerCase()}.pdf"`,
+        },
+      })
     } catch (puppeteerErr) {
       console.error('Puppeteer error:', puppeteerErr)
       // Fallback: retorna o HTML para o browser imprimir
@@ -62,14 +68,6 @@ export async function GET(_req: Request, { params }: { params: { id: string } })
         },
       })
     }
-
-    return new NextResponse(pdfBuffer, {
-      status: 200,
-      headers: {
-        'Content-Type': 'application/pdf',
-        'Content-Disposition': `attachment; filename="carta-${carta.nome_colaborador.replace(/\s+/g, '-').toLowerCase()}.pdf"`,
-      },
-    })
   } catch (err) {
     return NextResponse.json({ error: String(err) }, { status: 500 })
   }
