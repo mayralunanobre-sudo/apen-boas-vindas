@@ -49,13 +49,12 @@ export async function GET(_req: Request, { params }: { params: { id: string } })
         margin: { top: '0', right: '0', bottom: '0', left: '0' },
       })
       await browser.close()
-      const pdfBuffer: Uint8Array = Buffer.from(pdfBytes)
-      return new Response(pdfBuffer, {
+      return new Response(pdfBytes, {
         status: 200,
         headers: {
           'Content-Type': 'application/pdf',
-          'Content-Disposition': 'attachment; filename=carta.pdf',
-        },
+          'Content-Disposition': 'attachment; filename=carta.pdf'
+        }
       })
     } catch (puppeteerErr) {
       console.error('Puppeteer error:', puppeteerErr)
