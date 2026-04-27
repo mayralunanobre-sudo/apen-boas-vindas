@@ -11,8 +11,7 @@ export default function AdminPanel({ carta: initialCarta }: Props) {
   const [password, setPassword] = useState('')
   const [authError, setAuthError] = useState('')
   const [carta, setCarta] = useState(initialCarta)
-  const [loadingPdf, setLoadingPdf] = useState(false)
-  const [pdfError, setPdfError] = useState('')
+  const [pdfTip, setPdfTip] = useState(false)
   const [deletingId, setDeletingId] = useState<string | null>(null)
   const [movingId, setMovingId] = useState<string | null>(null)
 
@@ -70,27 +69,9 @@ export default function AdminPanel({ carta: initialCarta }: Props) {
     }
   }
 
-  async function handleGeneratePDF() {
-    setLoadingPdf(true)
-    setPdfError('')
-    try {
-      const res = await fetch(`/api/pdf/${carta.id}`)
-      if (!res.ok) {
-        const json = await res.json()
-        throw new Error(json.error || 'Erro ao gerar PDF')
-      }
-      const blob = await res.blob()
-      const url = URL.createObjectURL(blob)
-      const a = document.createElement('a')
-      a.href = url
-      a.download = `carta-boas-vindas-${carta.nome_colaborador.replace(/\s+/g, '-').toLowerCase()}.pdf`
-      a.click()
-      URL.revokeObjectURL(url)
-    } catch (err: unknown) {
-      setPdfError(err instanceof Error ? err.message : 'Erro ao gerar PDF')
-    } finally {
-      setLoadingPdf(false)
-    }
+  function handleGeneratePDF() {
+    window.open(`/preview/${carta.id}`, '_blank')
+    setPdfTip(true)
   }
 
   if (!authed) {
@@ -152,17 +133,20 @@ export default function AdminPanel({ carta: initialCarta }: Props) {
             </a>
             <button
               onClick={handleGeneratePDF}
-              disabled={loadingPdf}
               className="btn-primary text-sm py-2 px-4"
             >
-              {loadingPdf ? 'Gerando...' : 'Gerar PDF'}
+              🖨️ Gerar PDF
             </button>
           </div>
         </div>
 
-        {pdfError && (
-          <div className="bg-red-50 border border-red-200 text-red-700 rounded-lg p-3 text-sm">
-            {pdfError}
+        {pdfTip && (
+          <div className="bg-green-50 border border-green-200 text-green-800 rounded-lg p-4 text-sm flex items-start gap-3">
+            <span className="text-xl">💡</span>
+            <div>
+              <p className="font-semibold mb-1">O preview foi aberto em uma nova aba!</p>
+              <p>Na aba de preview, pressione <kbd className="bg-white border border-gray-300 rounded px-1.5 py-0.5 font-mono text-xs">Ctrl+P</kbd> (Windows) ou <kbd className="bg-white border border-gray-300 rounded px-1.5 py-0.5 font-mono text-xs">⌘+P</kbd> (Mac), selecione <strong>"Salvar como PDF"</strong> como destino e clique em Salvar.</p>
+            </div>
           </div>
         )}
 
