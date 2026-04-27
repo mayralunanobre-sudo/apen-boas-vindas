@@ -145,7 +145,7 @@ export default function AdminPanel({ carta: initialCarta }: Props) {
             <span className="text-xl">💡</span>
             <div>
               <p className="font-semibold mb-1">O preview foi aberto em uma nova aba!</p>
-              <p>Na aba de preview, pressione <kbd className="bg-white border border-gray-300 rounded px-1.5 py-0.5 font-mono text-xs">Ctrl+P</kbd> (Windows) ou <kbd className="bg-white border border-gray-300 rounded px-1.5 py-0.5 font-mono text-xs">⌘+P</kbd> (Mac), selecione <strong>"Salvar como PDF"</strong> como destino e clique em Salvar.</p>
+              <p>Na aba de preview, pressione <kbd className="bg-white border border-gray-300 rounded px-1.5 py-0.5 font-mono text-xs">Ctrl+P</kbd> (Windows) ou <kbd className="bg-white border border-gray-300 rounded px-1.5 py-0.5 font-mono text-xs">⌘+P</kbd> (Mac), selecione <strong>&quot;Salvar como PDF&quot;</strong> como destino e clique em Salvar.</p>
             </div>
           </div>
         )}
