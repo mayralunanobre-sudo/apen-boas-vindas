@@ -111,7 +111,7 @@ export default function CriarCartaPage() {
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img src="/logo-apen.png" alt="Åpen Capital" className="h-10" />
           </div>
-          <h1 className="section-title text-4xl mb-2">Nova Carta de Boas-Vindas</h1>
+          <h1 className="font-montserrat text-4xl font-bold text-apen-dark mb-2">Nova Carta de Boas-Vindas</h1>
           <p className="text-gray-600">Preencha os dados para criar a carta do novo colaborador</p>
         </div>
 

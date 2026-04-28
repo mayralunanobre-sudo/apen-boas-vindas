@@ -17,6 +17,7 @@ const config: Config = {
       fontFamily: {
         cursive: ['Dancing Script', 'cursive'],
         sans: ['Inter', 'sans-serif'],
+        montserrat: ['Montserrat', 'sans-serif'],
       },
     },
   },
