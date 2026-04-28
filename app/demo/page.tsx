@@ -9,6 +9,8 @@ const cartaDemo: Carta = {
   cargo_admin: 'Diretora de Operações',
   mensagem_admin: 'Seja muito bem-vindo!',
   foto_admin_url: null,
+  mensagem_saulo: 'Que alegria! Sejam muito bem-vindos. Contem comigo! Saulo Godoy',
+  mensagem_tulio: 'O melhor começo de carreira é aquele que tem muito problema pra resolver. Vamos juntos!',
   pessoa1_nome: 'Natália Bunzen',
   pessoa1_cargo: 'Líder de Suporte a Cliente',
   pessoa1_foto_url: null,

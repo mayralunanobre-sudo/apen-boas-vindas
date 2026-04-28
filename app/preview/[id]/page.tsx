@@ -3,10 +3,6 @@ import type { Metadata } from 'next'
 import type { CartaComContribuicoes } from '@/lib/types'
 import PrintButton from './PrintButton'
 
-const TULIO_MESSAGE = `O melhor começo de carreira do mundo é aquele que tem muito problema pra resolver. Por isso, garanto: vocês estão no lugar certo! Sei o quanto a Åpen pode marcar a carreira de cada um de vocês, contem comigo nessa jornada... Tenho certeza de que a curiosidade intelectual e a vontade de trabalhar vão fazer toda a diferença para o crescimento de vocês lá na frente. Sejam muito bem-vindos. Vamos juntos! Abraços!`
-
-const SAULO_MESSAGE = `Que alegria! A sua chegada representa energia nova para uma empresa que há 6 anos vive o propósito de ser o braço direito dos clientes. Temos orgulho de ser a maior consultoria financeira do Norte e Nordeste e sabemos que isso se deve a todos os que estão aqui. Escolher cada um de vocês foi sentir que estamos construindo o futuro com ainda mais excelência, impacto e legado. Sejam muito bem-vindos. Contem comigo! Saulo Godoy`
-
 const FAMILY_PHRASE = `Você já tem uma família linda, esperamos, sinceramente, que aqui você também encontre uma segunda família super especial!`
 
 const APEN_VALUES = [
@@ -73,7 +69,7 @@ export default async function PreviewPage({ params }: { params: { id: string } }
 
   const blocks = [
     { name: 'Mayra Luna', role: 'Diretora de Operações', message: carta.mensagem_admin, photo: '/images/mayra-luna.jpg' },
-    { name: 'Túlio Cavalcanti', role: 'Diretor de Consultoria e Alocação', message: TULIO_MESSAGE, photo: '/images/tulio-cavalcanti.jpg' },
+    { name: 'Túlio Cavalcanti', role: 'Diretor de Consultoria e Alocação', message: carta.mensagem_tulio, photo: '/images/tulio-cavalcanti.jpg' },
     { name: carta.pessoa1_nome, role: carta.pessoa1_cargo, message: carta.pessoa1_mensagem, photo: carta.pessoa1_foto_url },
     { name: carta.pessoa2_nome, role: carta.pessoa2_cargo, message: carta.pessoa2_mensagem, photo: carta.pessoa2_foto_url },
   ]
@@ -101,7 +97,7 @@ export default async function PreviewPage({ params }: { params: { id: string } }
         </div>
 
         <div className="sticky-note">
-          <p style={{ fontSize: '11.5px', lineHeight: 1.7, color: '#444' }}>{SAULO_MESSAGE}</p>
+          <p style={{ fontSize: '11.5px', lineHeight: 1.7, color: '#444' }}>{carta.mensagem_saulo}</p>
         </div>
 
         {blocks.map((b, i) => (

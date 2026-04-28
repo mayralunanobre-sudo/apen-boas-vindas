@@ -6,6 +6,8 @@ export type Carta = {
   cargo_admin: string
   mensagem_admin: string
   foto_admin_url: string | null
+  mensagem_saulo: string
+  mensagem_tulio: string
   pessoa1_nome: string
   pessoa1_cargo: string
   pessoa1_foto_url: string | null

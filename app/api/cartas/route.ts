@@ -9,6 +9,8 @@ export async function POST(request: Request) {
     const id = uuidv4()
     const nomeColaborador = formData.get('nome_colaborador') as string
     const mensagemAdmin = formData.get('mensagem_admin') as string
+    const mensagemSaulo = formData.get('mensagem_saulo') as string
+    const mensagemTulio = formData.get('mensagem_tulio') as string
     const pessoa1Nome = formData.get('pessoa1_nome') as string
     const pessoa1Cargo = formData.get('pessoa1_cargo') as string
     const pessoa2Nome = formData.get('pessoa2_nome') as string
@@ -35,6 +37,8 @@ export async function POST(request: Request) {
         cargo_admin: 'Diretora de Operações',
         mensagem_admin: mensagemAdmin,
         foto_admin_url: null,
+        mensagem_saulo: mensagemSaulo,
+        mensagem_tulio: mensagemTulio,
         pessoa1_nome: pessoa1Nome,
         pessoa1_cargo: pessoa1Cargo,
         pessoa2_nome: pessoa2Nome,

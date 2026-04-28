@@ -3,9 +3,15 @@
 import { useState, type ChangeEvent, type FormEvent } from 'react'
 import DropZone from './components/DropZone'
 
+const DEFAULT_SAULO = `Que alegria! A sua chegada representa energia nova para uma empresa que há 6 anos vive o propósito de ser o braço direito dos clientes. Temos orgulho de ser a maior consultoria financeira do Norte e Nordeste e sabemos que isso se deve a todos os que estão aqui. Escolher cada um de vocês foi sentir que estamos construindo o futuro com ainda mais excelência, impacto e legado. Sejam muito bem-vindos. Contem comigo! Saulo Godoy`
+
+const DEFAULT_TULIO = `O melhor começo de carreira do mundo é aquele que tem muito problema pra resolver. Por isso, garanto: vocês estão no lugar certo! Sei o quanto a Åpen pode marcar a carreira de cada um de vocês, contem comigo nessa jornada... Tenho certeza de que a curiosidade intelectual e a vontade de trabalhar vão fazer toda a diferença para o crescimento de vocês lá na frente. Sejam muito bem-vindos. Vamos juntos! Abraços!`
+
 type FormState = {
   nome_colaborador: string
   mensagem_admin: string
+  mensagem_saulo: string
+  mensagem_tulio: string
   pessoa1_nome: string
   pessoa1_cargo: string
   pessoa2_nome: string
@@ -16,6 +22,8 @@ export default function CriarCartaPage() {
   const [form, setForm] = useState<FormState>({
     nome_colaborador: '',
     mensagem_admin: '',
+    mensagem_saulo: DEFAULT_SAULO,
+    mensagem_tulio: DEFAULT_TULIO,
     pessoa1_nome: '',
     pessoa1_cargo: '',
     pessoa2_nome: '',
@@ -168,10 +176,50 @@ export default function CriarCartaPage() {
             </div>
           </div>
 
-          {/* Seção: Pessoa Extra 1 */}
+          {/* Seção: Mensagem de Saulo */}
           <div className="card">
             <h2 className="text-lg font-bold text-apen-dark mb-1 flex items-center gap-2">
               <span className="w-7 h-7 bg-apen-dark text-white rounded-full text-sm flex items-center justify-center">3</span>
+              Mensagem de Saulo Godoy
+            </h2>
+            <p className="text-sm text-gray-500 mb-4">Sócio fundador — aparece no bilhetinho amarelo da carta. Edite se quiser personalizar.</p>
+            <div>
+              <label className="label">Mensagem *</label>
+              <textarea
+                name="mensagem_saulo"
+                value={form.mensagem_saulo}
+                onChange={handleChange}
+                required
+                rows={5}
+                className="input-field resize-none"
+              />
+            </div>
+          </div>
+
+          {/* Seção: Mensagem de Túlio */}
+          <div className="card">
+            <h2 className="text-lg font-bold text-apen-dark mb-1 flex items-center gap-2">
+              <span className="w-7 h-7 bg-apen-dark text-white rounded-full text-sm flex items-center justify-center">4</span>
+              Mensagem de Túlio Cavalcanti
+            </h2>
+            <p className="text-sm text-gray-500 mb-4">Diretor de Consultoria e Alocação — mensagem fixa, mas editável se necessário.</p>
+            <div>
+              <label className="label">Mensagem *</label>
+              <textarea
+                name="mensagem_tulio"
+                value={form.mensagem_tulio}
+                onChange={handleChange}
+                required
+                rows={4}
+                className="input-field resize-none"
+              />
+            </div>
+          </div>
+
+          {/* Seção: Pessoa Extra 1 */}
+          <div className="card">
+            <h2 className="text-lg font-bold text-apen-dark mb-1 flex items-center gap-2">
+              <span className="w-7 h-7 bg-apen-dark text-white rounded-full text-sm flex items-center justify-center">5</span>
               Colaborador Åpen — Pessoa 1
             </h2>
             <p className="text-sm text-gray-500 mb-4">Esta pessoa receberá o link e preencherá a foto e mensagem por conta própria.</p>
@@ -204,10 +252,11 @@ export default function CriarCartaPage() {
           {/* Seção: Pessoa Extra 2 */}
           <div className="card">
             <h2 className="text-lg font-bold text-apen-dark mb-1 flex items-center gap-2">
-              <span className="w-7 h-7 bg-apen-dark text-white rounded-full text-sm flex items-center justify-center">4</span>
+              <span className="w-7 h-7 bg-apen-dark text-white rounded-full text-sm flex items-center justify-center">6</span>
               Colaborador Åpen — Pessoa 2
             </h2>
             <p className="text-sm text-gray-500 mb-4">Mesma dinâmica da Pessoa 1 — preencherá via link.</p>
+
             <div className="grid grid-cols-2 gap-4">
               <div>
                 <label className="label">Nome *</label>
