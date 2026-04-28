@@ -76,11 +76,12 @@ export default function AdminPanel({ carta: initialCarta }: Props) {
 
   if (!authed) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-green-50 to-white flex items-center justify-center p-4">
+      <div className="min-h-screen bg-gradient-to-br from-blue-50 to-white flex items-center justify-center p-4">
         <div className="max-w-sm w-full card">
           <div className="text-center mb-6">
-            <div className="w-12 h-12 bg-apen-dark rounded-lg flex items-center justify-center mx-auto mb-3">
-              <span className="text-white font-bold text-xl">Å</span>
+            <div className="flex justify-center mb-3">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src="/logo-apen.png" alt="Åpen Capital" className="h-8" />
             </div>
             <h1 className="text-xl font-bold text-apen-dark">Painel Administrativo</h1>
             <p className="text-sm text-gray-500 mt-1">Carta de {initialCarta.nome_colaborador}</p>
@@ -120,7 +121,10 @@ export default function AdminPanel({ carta: initialCarta }: Props) {
         {/* Header */}
         <div className="flex items-center justify-between">
           <div>
-            <div className="text-xs text-apen-medium font-semibold uppercase tracking-widest mb-1">Åpen Capital — Painel Admin</div>
+            <div className="mb-2">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src="/logo-apen.png" alt="Åpen Capital" className="h-6" />
+            </div>
             <h1 className="section-title text-3xl">Carta de {carta.nome_colaborador}</h1>
           </div>
           <div className="flex gap-2">
@@ -141,7 +145,7 @@ export default function AdminPanel({ carta: initialCarta }: Props) {
         </div>
 
         {pdfTip && (
-          <div className="bg-green-50 border border-green-200 text-green-800 rounded-lg p-4 text-sm flex items-start gap-3">
+          <div className="bg-blue-50 border border-blue-200 text-blue-900 rounded-lg p-4 text-sm flex items-start gap-3">
             <span className="text-xl">💡</span>
             <div>
               <p className="font-semibold mb-1">O preview foi aberto em uma nova aba!</p>
@@ -176,7 +180,6 @@ export default function AdminPanel({ carta: initialCarta }: Props) {
             <StatusItem label="Túlio Cavalcanti (mensagem fixa)" done={true} />
             <StatusItem label={`${carta.pessoa1_nome} (${carta.pessoa1_cargo})`} done={p1Ok} />
             <StatusItem label={`${carta.pessoa2_nome} (${carta.pessoa2_cargo})`} done={p2Ok} />
-            <StatusItem label={`${carta.nome_admin} (${carta.cargo_admin})`} done={!!carta.mensagem_admin} />
           </div>
         </div>
 

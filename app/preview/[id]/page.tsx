@@ -18,7 +18,7 @@ const APEN_VALUES = [
 ]
 
 const PRINT_CSS = `
-  .preview-root { font-family: 'Inter', sans-serif; background: #f5f5f5; min-height: 100vh; padding: 20px 0; }
+  .preview-root { font-family: 'Inter', sans-serif; background: #f0f2f5; min-height: 100vh; padding: 20px 0; }
   .page {
     width: 210mm;
     min-height: 297mm;
@@ -37,12 +37,12 @@ const PRINT_CSS = `
   }
   @page { size: A4; margin: 0; }
   .font-cursive { font-family: 'Dancing Script', cursive; }
-  .avatar { width: 90px; height: 90px; border-radius: 50%; object-fit: cover; border: 3px solid #2d7a5f; flex-shrink: 0; }
+  .avatar { width: 90px; height: 90px; border-radius: 50%; object-fit: cover; border: 3px solid #1e3260; flex-shrink: 0; }
   .avatar-sm { width: 80px; height: 80px; }
-  .avatar-placeholder { background: #d1e8de; display: flex; align-items: center; justify-content: center; font-size: 28px; }
-  .block-row { display: flex; gap: 14px; align-items: flex-start; padding: 14px 0; border-bottom: 1px solid #e8f0ed; }
+  .avatar-placeholder { background: #d0d8ee; display: flex; align-items: center; justify-content: center; font-size: 28px; }
+  .block-row { display: flex; gap: 14px; align-items: flex-start; padding: 14px 0; border-bottom: 1px solid #e0e8f0; }
   .block-row-rev { flex-direction: row-reverse; }
-  .green-footer { background: #1a4a3a; color: white; position: absolute; bottom: 0; left: 0; right: 0; padding: 10px 16mm; display: flex; }
+  .navy-footer { background: #162040; color: white; position: absolute; bottom: 0; left: 0; right: 0; padding: 10px 16mm; display: flex; }
   .value-item { flex: 1; text-align: center; font-size: 8px; font-weight: 600; padding: 4px 6px; border-right: 1px solid rgba(255,255,255,0.3); }
   .value-item:last-child { border-right: none; }
   .sticky-note { background: #fffacd; border: 1px solid #f0e070; border-radius: 4px; padding: 14px 18px; margin-bottom: 16px; box-shadow: 3px 3px 8px rgba(0,0,0,0.12); }
@@ -76,7 +76,6 @@ export default async function PreviewPage({ params }: { params: { id: string } }
     { name: 'Túlio Cavalcanti', role: 'Diretor de Consultoria e Alocação', message: TULIO_MESSAGE, photo: '/images/tulio-cavalcanti.jpg' },
     { name: carta.pessoa1_nome, role: carta.pessoa1_cargo, message: carta.pessoa1_mensagem, photo: carta.pessoa1_foto_url },
     { name: carta.pessoa2_nome, role: carta.pessoa2_cargo, message: carta.pessoa2_mensagem, photo: carta.pessoa2_foto_url },
-    { name: carta.nome_admin, role: carta.cargo_admin, message: carta.mensagem_admin, photo: carta.foto_admin_url },
   ]
 
   return (
@@ -87,16 +86,17 @@ export default async function PreviewPage({ params }: { params: { id: string } }
 
       {/* PÁGINA 1 */}
       <div className="page">
-        <div style={{ display: 'flex', alignItems: 'center', gap: '18px', marginBottom: '16px', paddingBottom: '14px', borderBottom: '3px solid #1a4a3a' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '18px', marginBottom: '16px', paddingBottom: '14px', borderBottom: '3px solid #162040' }}>
           {carta.foto_colaborador_url ? (
             // eslint-disable-next-line @next/next/no-img-element
             <img src={carta.foto_colaborador_url} alt={carta.nome_colaborador} className="avatar" />
           ) : (
             <div className="avatar avatar-placeholder">👤</div>
           )}
-          <div>
-            <div style={{ fontSize: '10px', textTransform: 'uppercase', letterSpacing: '2px', color: '#2d7a5f', fontWeight: 600 }}>Bem-vindo(a) à Åpen Capital</div>
-            <div className="font-cursive" style={{ fontSize: '38px', color: '#1a4a3a', lineHeight: 1.1 }}>{carta.nome_colaborador}</div>
+          <div style={{ flex: 1 }}>
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src="/logo-apen.png" alt="Åpen Capital" style={{ height: '22px', marginBottom: '6px' }} />
+            <div className="font-cursive" style={{ fontSize: '38px', color: '#162040', lineHeight: 1.1 }}>{carta.nome_colaborador}</div>
           </div>
         </div>
 
@@ -113,8 +113,8 @@ export default async function PreviewPage({ params }: { params: { id: string } }
               <div className="avatar avatar-sm avatar-placeholder">👤</div>
             )}
             <div style={{ flex: 1 }}>
-              <div className="font-cursive" style={{ fontSize: '18px', color: '#1a4a3a', marginBottom: '2px' }}>{b.name}</div>
-              <div style={{ fontWeight: 700, textDecoration: 'underline', textDecorationColor: '#2d7a5f', fontSize: '12px', color: '#2d7a5f', marginBottom: '8px' }}>{b.role}</div>
+              <div className="font-cursive" style={{ fontSize: '18px', color: '#162040', marginBottom: '2px' }}>{b.name}</div>
+              <div style={{ fontWeight: 700, textDecoration: 'underline', textDecorationColor: '#1e3260', fontSize: '12px', color: '#1e3260', marginBottom: '8px' }}>{b.role}</div>
               <p style={{ fontSize: '12px', lineHeight: 1.6, color: '#333' }}>
                 {b.message ?? <em style={{ color: '#999' }}>Mensagem ainda não enviada</em>}
               </p>
@@ -122,7 +122,7 @@ export default async function PreviewPage({ params }: { params: { id: string } }
           </div>
         ))}
 
-        <div className="green-footer">
+        <div className="navy-footer">
           {APEN_VALUES.map((v, i) => (
             <div key={i} className="value-item">{v}</div>
           ))}
@@ -131,7 +131,7 @@ export default async function PreviewPage({ params }: { params: { id: string } }
 
       {/* PÁGINA 2 */}
       <div className="page">
-        <div style={{ display: 'flex', alignItems: 'center', gap: '18px', marginBottom: '16px', paddingBottom: '14px', borderBottom: '3px solid #1a4a3a' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '18px', marginBottom: '16px', paddingBottom: '14px', borderBottom: '3px solid #162040' }}>
           {carta.foto_colaborador_url ? (
             // eslint-disable-next-line @next/next/no-img-element
             <img src={carta.foto_colaborador_url} alt={carta.nome_colaborador} className="avatar avatar-sm" />
@@ -139,8 +139,8 @@ export default async function PreviewPage({ params }: { params: { id: string } }
             <div className="avatar avatar-sm avatar-placeholder">👤</div>
           )}
           <div>
-            <div className="font-cursive" style={{ fontSize: '32px', color: '#1a4a3a' }}>{carta.nome_colaborador}</div>
-            <div style={{ fontSize: '12px', color: '#2d7a5f', marginTop: '4px', fontStyle: 'italic' }}>{FAMILY_PHRASE}</div>
+            <div className="font-cursive" style={{ fontSize: '32px', color: '#162040' }}>{carta.nome_colaborador}</div>
+            <div style={{ fontSize: '12px', color: '#1e3260', marginTop: '4px', fontStyle: 'italic' }}>{FAMILY_PHRASE}</div>
           </div>
         </div>
 
@@ -152,7 +152,7 @@ export default async function PreviewPage({ params }: { params: { id: string } }
           <div style={{ columns: 2, gap: '12px', marginBottom: '24px' }}>
             {familyContribs.map((c) => (
               <div key={c.id} className="family-card">
-                <div className="font-cursive" style={{ fontSize: '15px', color: '#1a4a3a', marginBottom: '6px' }}>{c.nome_remetente}</div>
+                <div className="font-cursive" style={{ fontSize: '15px', color: '#162040', marginBottom: '6px' }}>{c.nome_remetente}</div>
                 <p style={{ fontSize: '11px', lineHeight: 1.6, color: '#333' }}>{c.mensagem}</p>
               </div>
             ))}
@@ -161,17 +161,17 @@ export default async function PreviewPage({ params }: { params: { id: string } }
 
         {familyContribs.some((c) => c.fotos_familia_urls?.length) && (
           <div>
-            <h3 className="font-cursive" style={{ fontSize: '18px', color: '#1a4a3a', marginBottom: '12px' }}>Fotos da Família</h3>
+            <h3 className="font-cursive" style={{ fontSize: '18px', color: '#162040', marginBottom: '12px' }}>Fotos da Família</h3>
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: '8px' }}>
               {familyContribs.flatMap((c) => c.fotos_familia_urls ?? []).map((url, i) => (
                 // eslint-disable-next-line @next/next/no-img-element
-                <img key={i} src={url} alt="Foto" style={{ width: '100%', height: '120px', objectFit: 'cover', borderRadius: '6px', border: '2px solid #2d7a5f' }} />
+                <img key={i} src={url} alt="Foto" style={{ width: '100%', height: '120px', objectFit: 'cover', borderRadius: '6px', border: '2px solid #1e3260' }} />
               ))}
             </div>
           </div>
         )}
 
-        <div className="green-footer">
+        <div className="navy-footer">
           {APEN_VALUES.map((v, i) => (
             <div key={i} className="value-item">{v}</div>
           ))}

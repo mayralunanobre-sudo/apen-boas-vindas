@@ -4,8 +4,6 @@ import { useState, type ChangeEvent, type FormEvent } from 'react'
 
 type FormState = {
   nome_colaborador: string
-  nome_admin: string
-  cargo_admin: string
   mensagem_admin: string
   pessoa1_nome: string
   pessoa1_cargo: string
@@ -16,8 +14,6 @@ type FormState = {
 export default function CriarCartaPage() {
   const [form, setForm] = useState<FormState>({
     nome_colaborador: '',
-    nome_admin: '',
-    cargo_admin: '',
     mensagem_admin: '',
     pessoa1_nome: '',
     pessoa1_cargo: '',
@@ -25,7 +21,6 @@ export default function CriarCartaPage() {
     pessoa2_cargo: '',
   })
   const [fotoColaborador, setFotoColaborador] = useState<File | null>(null)
-  const [fotoAdmin, setFotoAdmin] = useState<File | null>(null)
   const [loading, setLoading] = useState(false)
   const [result, setResult] = useState<{ id: string; url: string } | null>(null)
   const [error, setError] = useState('')
@@ -43,7 +38,6 @@ export default function CriarCartaPage() {
     const data = new FormData()
     Object.entries(form).forEach(([k, v]) => data.append(k, v))
     if (fotoColaborador) data.append('foto_colaborador', fotoColaborador)
-    if (fotoAdmin) data.append('foto_admin', fotoAdmin)
 
     try {
       const res = await fetch('/api/cartas', { method: 'POST', body: data })
@@ -67,7 +61,7 @@ export default function CriarCartaPage() {
 
   if (result) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-green-50 to-white flex items-center justify-center p-4">
+      <div className="min-h-screen bg-gradient-to-br from-blue-50 to-white flex items-center justify-center p-4">
         <div className="max-w-lg w-full card text-center">
           <div className="w-16 h-16 bg-apen-dark rounded-full flex items-center justify-center mx-auto mb-4">
             <svg className="w-8 h-8 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -109,15 +103,13 @@ export default function CriarCartaPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-green-50 to-white py-10 px-4">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-white py-10 px-4">
       <div className="max-w-2xl mx-auto">
         {/* Header */}
         <div className="text-center mb-10">
-          <div className="inline-flex items-center gap-3 mb-4">
-            <div className="w-10 h-10 bg-apen-dark rounded-lg flex items-center justify-center">
-              <span className="text-white font-bold text-lg">Å</span>
-            </div>
-            <span className="text-xl font-bold text-apen-dark">Åpen Capital</span>
+          <div className="flex justify-center mb-5">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src="/logo-apen.png" alt="Åpen Capital" className="h-10" />
           </div>
           <h1 className="section-title text-4xl mb-2">Nova Carta de Boas-Vindas</h1>
           <p className="text-gray-600">Preencha os dados para criar a carta do novo colaborador</p>
@@ -168,66 +160,24 @@ export default function CriarCartaPage() {
             </div>
           </div>
 
-          {/* Seção: Admin (Mayra Luna) */}
+          {/* Seção: Mensagem de Mayra */}
           <div className="card">
-            <h2 className="text-lg font-bold text-apen-dark mb-4 flex items-center gap-2">
+            <h2 className="text-lg font-bold text-apen-dark mb-1 flex items-center gap-2">
               <span className="w-7 h-7 bg-apen-dark text-white rounded-full text-sm flex items-center justify-center">2</span>
-              Seus dados (administrador)
+              Mensagem de Mayra Luna
             </h2>
-            <div className="space-y-4">
-              <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <label className="label">Seu nome *</label>
-                  <input
-                    name="nome_admin"
-                    value={form.nome_admin}
-                    onChange={handleChange}
-                    required
-                    placeholder="Ex: Mayra Luna"
-                    className="input-field"
-                  />
-                </div>
-                <div>
-                  <label className="label">Seu cargo *</label>
-                  <input
-                    name="cargo_admin"
-                    value={form.cargo_admin}
-                    onChange={handleChange}
-                    required
-                    placeholder="Ex: Diretora de Operações"
-                    className="input-field"
-                  />
-                </div>
-              </div>
-              <div>
-                <label className="label">Sua mensagem de boas-vindas *</label>
-                <textarea
-                  name="mensagem_admin"
-                  value={form.mensagem_admin}
-                  onChange={handleChange}
-                  required
-                  rows={4}
-                  placeholder="Escreva sua mensagem personalizada para o novo colaborador..."
-                  className="input-field resize-none"
-                />
-              </div>
-              <div>
-                <label className="label">Sua foto (opcional)</label>
-                <div className="upload-area" onClick={() => document.getElementById('foto-admin')?.click()}>
-                  {fotoAdmin ? (
-                    <div className="flex items-center justify-center gap-2 text-apen-dark">
-                      <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                      </svg>
-                      <span className="font-medium">{fotoAdmin.name}</span>
-                    </div>
-                  ) : (
-                    <p className="text-sm text-gray-500">Clique para fazer upload (opcional)</p>
-                  )}
-                  <input id="foto-admin" type="file" accept="image/*" className="hidden"
-                    onChange={(e) => setFotoAdmin(e.target.files?.[0] ?? null)} />
-                </div>
-              </div>
+            <p className="text-sm text-gray-500 mb-4">Diretora de Operações — sua mensagem aparecerá na carta com sua foto e nome fixos.</p>
+            <div>
+              <label className="label">Sua mensagem de boas-vindas *</label>
+              <textarea
+                name="mensagem_admin"
+                value={form.mensagem_admin}
+                onChange={handleChange}
+                required
+                rows={4}
+                placeholder="Escreva sua mensagem personalizada para o novo colaborador..."
+                className="input-field resize-none"
+              />
             </div>
           </div>
 

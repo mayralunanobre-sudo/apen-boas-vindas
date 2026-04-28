@@ -7,7 +7,7 @@ export async function POST(request: Request) {
     const formData = await request.formData()
 
     const cartaId = formData.get('carta_id') as string
-    const senderType = formData.get('sender_type') as 'pessoa1' | 'pessoa2' | 'familia'
+    const senderType = formData.get('sender_type') as 'pessoa1' | 'pessoa2' | 'familia' | 'outro'
     const nomeRemetente = formData.get('nome_remetente') as string
     const mensagem = formData.get('mensagem') as string
 
@@ -52,7 +52,9 @@ export async function POST(request: Request) {
       return NextResponse.json({ ok: true })
     }
 
-    // Família: insere contribuição
+    // Família → página 2 | Outra pessoa → página 1
+    const pagina = senderType === 'familia' ? 2 : 1
+
     const { data, error } = await supabaseAdmin
       .from('contribuicoes')
       .insert({
@@ -62,7 +64,7 @@ export async function POST(request: Request) {
         mensagem,
         foto_remetente_url: fotoRemetenteUrl,
         fotos_familia_urls: fotosFamiliaUrls.length > 0 ? fotosFamiliaUrls : null,
-        pagina: 2,
+        pagina,
       })
       .select()
       .single()

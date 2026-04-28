@@ -9,9 +9,9 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        'apen-dark': '#1a4a3a',
-        'apen-medium': '#2d7a5f',
-        'apen-light': '#4a9e7f',
+        'apen-dark': '#162040',
+        'apen-medium': '#1e3260',
+        'apen-light': '#2b4a8a',
         'sticky': '#fffacd',
       },
       fontFamily: {

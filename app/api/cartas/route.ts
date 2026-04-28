@@ -8,8 +8,6 @@ export async function POST(request: Request) {
 
     const id = uuidv4()
     const nomeColaborador = formData.get('nome_colaborador') as string
-    const nomeAdmin = formData.get('nome_admin') as string
-    const cargoAdmin = formData.get('cargo_admin') as string
     const mensagemAdmin = formData.get('mensagem_admin') as string
     const pessoa1Nome = formData.get('pessoa1_nome') as string
     const pessoa1Cargo = formData.get('pessoa1_cargo') as string
@@ -17,7 +15,6 @@ export async function POST(request: Request) {
     const pessoa2Cargo = formData.get('pessoa2_cargo') as string
 
     let fotoColaboradorUrl: string | null = null
-    let fotoAdminUrl: string | null = null
 
     const fotoColab = formData.get('foto_colaborador') as File | null
     if (fotoColab && fotoColab.size > 0) {
@@ -28,25 +25,16 @@ export async function POST(request: Request) {
       )
     }
 
-    const fotoAdmin = formData.get('foto_admin') as File | null
-    if (fotoAdmin && fotoAdmin.size > 0) {
-      fotoAdminUrl = await uploadFromFormFile(
-        'fotos_colaboradores',
-        `${id}/admin`,
-        fotoAdmin
-      )
-    }
-
     const { data, error } = await supabaseAdmin
       .from('cartas')
       .insert({
         id,
         nome_colaborador: nomeColaborador,
         foto_colaborador_url: fotoColaboradorUrl,
-        nome_admin: nomeAdmin,
-        cargo_admin: cargoAdmin,
+        nome_admin: 'Mayra Luna',
+        cargo_admin: 'Diretora de Operações',
         mensagem_admin: mensagemAdmin,
-        foto_admin_url: fotoAdminUrl,
+        foto_admin_url: null,
         pessoa1_nome: pessoa1Nome,
         pessoa1_cargo: pessoa1Cargo,
         pessoa2_nome: pessoa2Nome,

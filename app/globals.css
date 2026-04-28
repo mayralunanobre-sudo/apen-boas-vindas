@@ -6,9 +6,9 @@
 
 @layer base {
   :root {
-    --apen-dark: #1a4a3a;
-    --apen-medium: #2d7a5f;
-    --apen-light: #4a9e7f;
+    --apen-dark: #162040;
+    --apen-medium: #1e3260;
+    --apen-light: #2b4a8a;
     --sticky: #fffacd;
   }
 
@@ -58,7 +58,7 @@
 }
 
 .upload-area {
-  @apply border-2 border-dashed border-apen-medium rounded-lg p-6 text-center cursor-pointer hover:bg-green-50 transition-colors;
+  @apply border-2 border-dashed border-apen-medium rounded-lg p-6 text-center cursor-pointer hover:bg-blue-50 transition-colors;
 }
 
 .message-block-even {
