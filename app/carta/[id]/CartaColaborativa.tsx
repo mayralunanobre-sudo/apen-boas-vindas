@@ -3,6 +3,7 @@
 import { useState, type FormEvent } from 'react'
 import Image from 'next/image'
 import type { Carta, Contribuicao } from '@/lib/types'
+import DropZone from '@/app/components/DropZone'
 
 type Props = {
   carta: Carta & { contribuicoes: Contribuicao[] }
@@ -259,20 +260,13 @@ export default function CartaColaborativa({ carta }: Props) {
                 <label className="label">
                   Sua foto {(senderType === 'pessoa1' || senderType === 'pessoa2') ? '*' : '(opcional)'}
                 </label>
-                <div className="upload-area" onClick={() => document.getElementById('foto-rem')?.click()}>
-                  {fotoRemetente ? (
-                    <div className="flex items-center justify-center gap-2 text-apen-dark">
-                      <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                      </svg>
-                      <span className="text-sm font-medium">{fotoRemetente.name}</span>
-                    </div>
-                  ) : (
-                    <p className="text-sm text-gray-500">Toque para escolher sua foto</p>
-                  )}
-                  <input id="foto-rem" type="file" accept="image/*" capture="user" className="hidden"
-                    onChange={(e) => setFotoRemetente(e.target.files?.[0] ?? null)} />
-                </div>
+                <DropZone
+                  id="foto-rem"
+                  file={fotoRemetente}
+                  onFile={setFotoRemetente}
+                  capture="user"
+                  label="Arraste sua foto aqui ou clique para selecionar"
+                />
               </div>
             )}
 
@@ -295,20 +289,13 @@ export default function CartaColaborativa({ carta }: Props) {
             {senderType === 'familia' && (
               <div>
                 <label className="label">📸 Fotos da família (opcional)</label>
-                <div className="upload-area" onClick={() => document.getElementById('fotos-fam')?.click()}>
-                  {fotosFamilia.length > 0 ? (
-                    <div className="text-apen-dark">
-                      <svg className="w-5 h-5 inline mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                      </svg>
-                      <span className="text-sm font-medium">{fotosFamilia.length} foto(s) selecionada(s)</span>
-                    </div>
-                  ) : (
-                    <p className="text-sm text-gray-500">Envie fotos para aparecer na página da família</p>
-                  )}
-                  <input id="fotos-fam" type="file" accept="image/*" multiple className="hidden"
-                    onChange={(e) => setFotosFamilia(Array.from(e.target.files || []))} />
-                </div>
+                <DropZone
+                  id="fotos-fam"
+                  multiple
+                  files={fotosFamilia}
+                  onFiles={setFotosFamilia}
+                  label="Arraste as fotos aqui ou clique para selecionar (múltiplas)"
+                />
               </div>
             )}
 
