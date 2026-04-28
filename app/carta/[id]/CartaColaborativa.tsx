@@ -9,7 +9,7 @@ type Props = {
   carta: Carta & { contribuicoes: Contribuicao[] }
 }
 
-type SenderType = 'pessoa1' | 'pessoa2' | 'familia' | 'outro'
+type SenderType = 'pessoa1' | 'pessoa2' | 'familia'
 
 export default function CartaColaborativa({ carta }: Props) {
   const [senderType, setSenderType] = useState<SenderType | ''>('')
@@ -54,7 +54,7 @@ export default function CartaColaborativa({ carta }: Props) {
       setLoading(false)
       return
     }
-    if ((senderType === 'familia' || senderType === 'outro') && !nome.trim()) {
+    if (senderType === 'familia' && !nome.trim()) {
       setError('Por favor, informe seu nome.')
       setLoading(false)
       return
@@ -89,26 +89,30 @@ export default function CartaColaborativa({ carta }: Props) {
 
         {/* Header com dados do colaborador */}
         <div className="card mb-6 text-center">
-          <div className="flex justify-center mb-3">
+          <div className="flex justify-center mb-4">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img src="/logo-apen.png" alt="Åpen Capital" className="h-7" />
           </div>
-          {carta.foto_colaborador_url && (
-            <div className="flex justify-center mb-3">
+          <div className="flex justify-center mb-4">
+            {carta.foto_colaborador_url ? (
               <Image
                 src={carta.foto_colaborador_url}
                 alt={carta.nome_colaborador}
-                width={100}
-                height={100}
-                className="avatar-circle w-24 h-24"
+                width={120}
+                height={120}
+                className="rounded-full object-cover border-4 border-apen-dark w-28 h-28"
               />
-            </div>
-          )}
+            ) : (
+              <div className="w-28 h-28 rounded-full border-4 border-apen-dark bg-apen-dark flex items-center justify-center text-white text-4xl font-bold">
+                {carta.nome_colaborador.charAt(0).toUpperCase()}
+              </div>
+            )}
+          </div>
           <h1 className="section-title text-3xl mb-1">
             Boas-vindas, {carta.nome_colaborador}!
           </h1>
-          <p className="text-gray-600 text-sm mt-2">
-            Envie sua mensagem de boas-vindas para este novo colaborador.
+          <p className="text-gray-500 text-sm mt-2">
+            Deixe sua mensagem de boas-vindas para o novo membro do time 💙
           </p>
         </div>
 
@@ -219,29 +223,15 @@ export default function CartaColaborativa({ carta }: Props) {
                     className="accent-apen-dark"
                   />
                   <div>
-                    <p className="font-semibold text-sm text-apen-dark">📸 Família</p>
-                    <p className="text-xs text-gray-500">Envie fotos e uma mensagem especial da família</p>
-                  </div>
-                </label>
-                <label className={`flex items-center gap-3 p-3 rounded-lg border-2 cursor-pointer transition-colors ${senderType === 'outro' ? 'border-apen-dark bg-blue-50' : 'border-gray-200 hover:border-apen-medium'}`}>
-                  <input
-                    type="radio"
-                    name="sender"
-                    value="outro"
-                    checked={senderType === 'outro'}
-                    onChange={() => handleSenderChange('outro')}
-                    className="accent-apen-dark"
-                  />
-                  <div>
-                    <p className="font-semibold text-sm text-apen-dark">💬 Outra pessoa</p>
-                    <p className="text-xs text-gray-500">Amigo, colega ou qualquer pessoa que queira deixar um recado</p>
+                    <p className="font-semibold text-sm text-apen-dark">💬 Familiar ou amigo(a)</p>
+                    <p className="text-xs text-gray-500">Envie uma mensagem e fotos especiais</p>
                   </div>
                 </label>
               </div>
             </div>
 
-            {/* Nome (para família e outros) */}
-            {(senderType === 'familia' || senderType === 'outro') && (
+            {/* Nome */}
+            {senderType === 'familia' && (
               <div>
                 <label className="label">Seu nome *</label>
                 <input
@@ -254,12 +244,10 @@ export default function CartaColaborativa({ carta }: Props) {
               </div>
             )}
 
-            {/* Foto do remetente (apenas para colaboradores Åpen e família) */}
-            {(senderType === 'pessoa1' || senderType === 'pessoa2' || senderType === 'familia') && (
+            {/* Foto do remetente — só para colaboradores pré-selecionados */}
+            {(senderType === 'pessoa1' || senderType === 'pessoa2') && (
               <div>
-                <label className="label">
-                  Sua foto {(senderType === 'pessoa1' || senderType === 'pessoa2') ? '*' : '(opcional)'}
-                </label>
+                <label className="label">Sua foto *</label>
                 <DropZone
                   id="foto-rem"
                   file={fotoRemetente}
@@ -285,17 +273,41 @@ export default function CartaColaborativa({ carta }: Props) {
               </div>
             )}
 
-            {/* Fotos de família */}
+            {/* Bloco de fotos — só para família, sem limite */}
             {senderType === 'familia' && (
-              <div>
-                <label className="label">📸 Fotos da família (opcional)</label>
+              <div className="border border-gray-200 rounded-xl p-4 space-y-3 bg-gray-50">
+                <div>
+                  <p className="font-semibold text-sm text-apen-dark">📸 Fotos</p>
+                  <p className="text-xs text-gray-500 mt-0.5">Envie quantas fotos quiser — elas aparecerão na carta</p>
+                </div>
                 <DropZone
                   id="fotos-fam"
                   multiple
                   files={fotosFamilia}
-                  onFiles={setFotosFamilia}
-                  label="Arraste as fotos aqui ou clique para selecionar (múltiplas)"
+                  onFiles={(novas) => setFotosFamilia((prev) => [...prev, ...novas])}
+                  label="Arraste as fotos aqui ou clique para selecionar"
                 />
+                {fotosFamilia.length > 0 && (
+                  <div className="grid grid-cols-3 gap-2">
+                    {fotosFamilia.map((f, i) => (
+                      <div key={i} className="relative group">
+                        {/* eslint-disable-next-line @next/next/no-img-element */}
+                        <img
+                          src={URL.createObjectURL(f)}
+                          alt={f.name}
+                          className="w-full h-20 object-cover rounded-lg border border-gray-200"
+                        />
+                        <button
+                          type="button"
+                          onClick={() => setFotosFamilia((prev) => prev.filter((_, idx) => idx !== i))}
+                          className="absolute top-1 right-1 w-5 h-5 bg-red-500 text-white rounded-full text-xs flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"
+                        >
+                          ×
+                        </button>
+                      </div>
+                    ))}
+                  </div>
+                )}
               </div>
             )}
 
