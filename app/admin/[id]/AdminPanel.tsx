@@ -18,7 +18,7 @@ export default function AdminPanel({ carta: initialCarta }: Props) {
   useEffect(() => {
     if (localStorage.getItem(AUTH_KEY) === 'true') {
       setAuthed(true)
-      fetch(`/api/cartas/${initialCarta.id}`)
+      fetch(`/api/cartas/${initialCarta.id}?t=${Date.now()}`)
         .then((r) => r.json())
         .then((data) => setCarta(data))
     }
@@ -57,7 +57,7 @@ export default function AdminPanel({ carta: initialCarta }: Props) {
       localStorage.setItem(AUTH_KEY, 'true')
       setAuthed(true)
       // busca dados frescos ao autenticar
-      const cartaRes = await fetch(`/api/cartas/${initialCarta.id}`)
+      const cartaRes = await fetch(`/api/cartas/${initialCarta.id}?t=${Date.now()}`)
       if (cartaRes.ok) {
         const data = await cartaRes.json()
         setCarta(data)

@@ -2,16 +2,26 @@ import { notFound } from 'next/navigation'
 import type { Metadata } from 'next'
 import type { CartaComContribuicoes } from '@/lib/types'
 import PreviewContent from '@/app/preview/PreviewContent'
+import { supabaseAdmin } from '@/lib/supabase-admin'
+
+export const dynamic = 'force-dynamic'
 
 async function getCarta(id: string): Promise<CartaComContribuicoes | null> {
-  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000'
-  try {
-    const res = await fetch(`${baseUrl}/api/cartas/${id}`, { cache: 'no-store' })
-    if (!res.ok) return null
-    return res.json()
-  } catch {
-    return null
-  }
+  const { data: carta, error } = await supabaseAdmin
+    .from('cartas')
+    .select('*')
+    .eq('id', id)
+    .single()
+
+  if (error || !carta) return null
+
+  const { data: contribuicoes } = await supabaseAdmin
+    .from('contribuicoes')
+    .select('*')
+    .eq('carta_id', id)
+    .order('criado_em', { ascending: true })
+
+  return { ...carta, contribuicoes: contribuicoes ?? [] }
 }
 
 export async function generateMetadata({ params }: { params: { id: string } }): Promise<Metadata> {
