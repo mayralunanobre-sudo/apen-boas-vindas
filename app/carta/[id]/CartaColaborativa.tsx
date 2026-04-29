@@ -147,9 +147,23 @@ export default function CartaColaborativa({ carta }: Props) {
               </svg>
             </div>
             <h2 className="section-title text-2xl mb-2">Mensagem enviada!</h2>
-            <p className="text-gray-600">
+            <p className="text-gray-600 mb-6">
               Obrigado pelo carinho. Sua mensagem foi registrada na carta de boas-vindas.
             </p>
+            <button
+              onClick={() => {
+                setSuccess(false)
+                setSenderType('')
+                setNome('')
+                setMensagem('')
+                setFotoRemetente(null)
+                setFotosFamilia([])
+                setError('')
+              }}
+              className="btn-secondary"
+            >
+              💬 Enviar outra mensagem
+            </button>
           </div>
         ) : (
           <form onSubmit={handleSubmit} className="card space-y-5">
