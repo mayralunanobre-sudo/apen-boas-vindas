@@ -2,6 +2,25 @@ import { NextResponse } from 'next/server'
 import { supabaseAdmin, uploadFromFormFile } from '@/lib/supabase-admin'
 import { v4 as uuidv4 } from 'uuid'
 
+export async function GET() {
+  try {
+    const { data: cartas, error } = await supabaseAdmin
+      .from('cartas')
+      .select(`
+        id, nome_colaborador, criado_em,
+        pessoa1_nome, pessoa1_mensagem,
+        pessoa2_nome, pessoa2_mensagem,
+        contribuicoes ( id, pagina, fotos_familia_urls )
+      `)
+      .order('criado_em', { ascending: false })
+
+    if (error) return NextResponse.json({ error: error.message }, { status: 500 })
+    return NextResponse.json(cartas)
+  } catch (err) {
+    return NextResponse.json({ error: String(err) }, { status: 500 })
+  }
+}
+
 export async function POST(request: Request) {
   try {
     const formData = await request.formData()

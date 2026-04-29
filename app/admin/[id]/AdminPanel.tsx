@@ -121,9 +121,12 @@ export default function AdminPanel({ carta: initialCarta }: Props) {
         {/* Header */}
         <div className="flex items-center justify-between">
           <div>
-            <div className="mb-2">
+            <div className="mb-2 flex items-center gap-4">
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img src="/logo-apen.png" alt="Åpen Capital" className="h-6" />
+              <a href="/admin" className="text-sm text-apen-medium hover:text-apen-dark transition-colors flex items-center gap-1">
+                ← Todas as cartas
+              </a>
             </div>
             <h1 className="section-title text-3xl">Carta de {carta.nome_colaborador}</h1>
           </div>
