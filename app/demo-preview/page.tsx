@@ -29,7 +29,6 @@ const cartaMock: CartaComContribuicoes = {
       id: '1',
       carta_id: 'demo',
       pagina: 2,
-      tipo_remetente: 'familia',
       nome_remetente: 'Ana Barbosa',
       mensagem:
         'Filho, estamos muito orgulhosos de você! Essa conquista é sua, fruto de muito esforço e dedicação. Que essa nova fase seja cheia de realizações. Te amamos muito!',
@@ -41,7 +40,6 @@ const cartaMock: CartaComContribuicoes = {
       id: '2',
       carta_id: 'demo',
       pagina: 2,
-      tipo_remetente: 'familia',
       nome_remetente: 'Carlos Barbosa',
       mensagem:
         'Meu filho, que orgulho! Você sempre soube onde queria chegar. Agora é só voar alto. Estaremos sempre torcendo por você!',
@@ -53,7 +51,6 @@ const cartaMock: CartaComContribuicoes = {
       id: '3',
       carta_id: 'demo',
       pagina: 2,
-      tipo_remetente: 'familia',
       nome_remetente: 'Mariana (melhor amiga)',
       mensagem:
         'Artur! Sabia que você ia arrasar. Você é incrível e merece tudo de bom. Vai com tudo nesse novo desafio!',
