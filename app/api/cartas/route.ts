@@ -2,6 +2,8 @@ import { NextResponse } from 'next/server'
 import { supabaseAdmin, uploadFromFormFile } from '@/lib/supabase-admin'
 import { v4 as uuidv4 } from 'uuid'
 
+export const dynamic = 'force-dynamic'
+
 export async function GET() {
   try {
     const { data: cartas, error } = await supabaseAdmin
@@ -15,7 +17,7 @@ export async function GET() {
       .order('criado_em', { ascending: false })
 
     if (error) return NextResponse.json({ error: error.message }, { status: 500 })
-    return NextResponse.json(cartas)
+    return NextResponse.json(cartas, { headers: { 'Cache-Control': 'no-store' } })
   } catch (err) {
     return NextResponse.json({ error: String(err) }, { status: 500 })
   }

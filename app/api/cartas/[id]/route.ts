@@ -1,6 +1,8 @@
 import { NextResponse } from 'next/server'
 import { supabaseAdmin } from '@/lib/supabase-admin'
 
+export const dynamic = 'force-dynamic'
+
 export async function GET(_req: Request, { params }: { params: { id: string } }) {
   const { data: carta, error } = await supabaseAdmin
     .from('cartas')
@@ -18,5 +20,8 @@ export async function GET(_req: Request, { params }: { params: { id: string } })
     .eq('carta_id', params.id)
     .order('criado_em', { ascending: true })
 
-  return NextResponse.json({ ...carta, contribuicoes: contribuicoes ?? [] })
+  return NextResponse.json(
+    { ...carta, contribuicoes: contribuicoes ?? [] },
+    { headers: { 'Cache-Control': 'no-store' } }
+  )
 }
