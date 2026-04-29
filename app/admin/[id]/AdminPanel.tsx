@@ -1,8 +1,10 @@
 'use client'
 
-import { useState, type FormEvent } from 'react'
+import { useState, useEffect, type FormEvent } from 'react'
 import Image from 'next/image'
 import type { CartaComContribuicoes, Contribuicao } from '@/lib/types'
+
+const AUTH_KEY = 'apen_admin_authed'
 
 type Props = { carta: CartaComContribuicoes }
 
@@ -11,6 +13,16 @@ export default function AdminPanel({ carta: initialCarta }: Props) {
   const [password, setPassword] = useState('')
   const [authError, setAuthError] = useState('')
   const [carta, setCarta] = useState(initialCarta)
+
+  // Verifica se já estava logada e busca dados frescos
+  useEffect(() => {
+    if (localStorage.getItem(AUTH_KEY) === 'true') {
+      setAuthed(true)
+      fetch(`/api/cartas/${initialCarta.id}`)
+        .then((r) => r.json())
+        .then((data) => setCarta(data))
+    }
+  }, [initialCarta.id])
   const [pdfTip, setPdfTip] = useState(false)
   const [deletingId, setDeletingId] = useState<string | null>(null)
   const [movingId, setMovingId] = useState<string | null>(null)
@@ -42,6 +54,7 @@ export default function AdminPanel({ carta: initialCarta }: Props) {
         setAuthError('Senha incorreta.')
         return
       }
+      localStorage.setItem(AUTH_KEY, 'true')
       setAuthed(true)
       // busca dados frescos ao autenticar
       const cartaRes = await fetch(`/api/cartas/${initialCarta.id}`)

@@ -13,12 +13,21 @@ type CartaResumo = {
   contribuicoes: { id: string; pagina: number; fotos_familia_urls: string[] | null }[]
 }
 
+const AUTH_KEY = 'apen_admin_authed'
+
 export default function AdminListPage() {
   const [authed, setAuthed] = useState(false)
   const [password, setPassword] = useState('')
   const [authError, setAuthError] = useState('')
   const [cartas, setCartas] = useState<CartaResumo[]>([])
   const [loading, setLoading] = useState(false)
+
+  // Verifica se já estava logada
+  useEffect(() => {
+    if (localStorage.getItem(AUTH_KEY) === 'true') {
+      setAuthed(true)
+    }
+  }, [])
 
   async function handleLogin(e: FormEvent) {
     e.preventDefault()
@@ -30,6 +39,7 @@ export default function AdminListPage() {
         body: JSON.stringify({ password }),
       })
       if (!res.ok) { setAuthError('Senha incorreta.'); return }
+      localStorage.setItem(AUTH_KEY, 'true')
       setAuthed(true)
     } catch {
       setAuthError('Erro ao verificar senha.')
