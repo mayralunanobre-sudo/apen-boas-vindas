@@ -115,27 +115,6 @@ export default function CartaColaborativa({ carta }: Props) {
           </p>
         </div>
 
-        {/* Mensagens já enviadas */}
-        {contribuicoes.length > 0 && (
-          <div className="card mb-6">
-            <h3 className="font-bold text-apen-dark mb-3 text-sm uppercase tracking-wide">
-              Mensagens recebidas ({contribuicoes.length})
-            </h3>
-            <div className="space-y-2">
-              {contribuicoes.map((c) => (
-                <div key={c.id} className="flex items-center gap-3 py-2 border-b border-gray-50 last:border-0">
-                  <div className="w-8 h-8 rounded-full bg-apen-dark text-white flex items-center justify-center text-xs font-bold flex-shrink-0">
-                    {c.nome_remetente.charAt(0).toUpperCase()}
-                  </div>
-                  <div className="flex-1 min-w-0">
-                    <p className="font-semibold text-sm text-apen-dark">{c.nome_remetente}</p>
-                    <p className="text-xs text-gray-500 truncate">{c.mensagem}</p>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        )}
 
         {/* Formulário */}
         {success ? (
