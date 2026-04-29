@@ -14,6 +14,20 @@ export default function AdminPanel({ carta: initialCarta }: Props) {
   const [pdfTip, setPdfTip] = useState(false)
   const [deletingId, setDeletingId] = useState<string | null>(null)
   const [movingId, setMovingId] = useState<string | null>(null)
+  const [refreshing, setRefreshing] = useState(false)
+
+  async function handleRefresh() {
+    setRefreshing(true)
+    try {
+      const res = await fetch(`/api/cartas/${carta.id}`)
+      if (res.ok) {
+        const data = await res.json()
+        setCarta(data)
+      }
+    } finally {
+      setRefreshing(false)
+    }
+  }
 
   async function handleLogin(e: FormEvent) {
     e.preventDefault()
@@ -29,6 +43,12 @@ export default function AdminPanel({ carta: initialCarta }: Props) {
         return
       }
       setAuthed(true)
+      // busca dados frescos ao autenticar
+      const cartaRes = await fetch(`/api/cartas/${initialCarta.id}`)
+      if (cartaRes.ok) {
+        const data = await cartaRes.json()
+        setCarta(data)
+      }
     } catch {
       setAuthError('Erro ao verificar senha.')
     }
@@ -131,6 +151,14 @@ export default function AdminPanel({ carta: initialCarta }: Props) {
             <h1 className="section-title text-3xl">Carta de {carta.nome_colaborador}</h1>
           </div>
           <div className="flex gap-2">
+            <button
+              onClick={handleRefresh}
+              disabled={refreshing}
+              className="btn-secondary text-sm py-2 px-4"
+              title="Atualizar status"
+            >
+              {refreshing ? '...' : '🔄 Atualizar'}
+            </button>
             <a
               href={`/preview/${carta.id}`}
               target="_blank"
