@@ -271,12 +271,11 @@ const PRINT_CSS = `
 
 export default function PreviewContent({ carta }: { carta: CartaComContribuicoes }) {
   const familyContribs = carta.contribuicoes.filter((c) => c.pagina === 2)
+  const apenContribs = carta.contribuicoes.filter((c) => c.pagina === 1)
 
-  const colleagues = [
+  const fixedColleagues = [
     { name: 'Mayra Luna', role: 'Diretora de Operações', message: carta.mensagem_admin, photo: '/images/mayra-luna.jpg' },
     { name: 'Túlio Cavalcanti', role: 'Diretor de Consultoria e Alocação', message: carta.mensagem_tulio, photo: '/images/tulio-cavalcanti.jpg' },
-    { name: carta.pessoa1_nome, role: carta.pessoa1_cargo, message: carta.pessoa1_mensagem, photo: carta.pessoa1_foto_url },
-    { name: carta.pessoa2_nome, role: carta.pessoa2_cargo, message: carta.pessoa2_mensagem, photo: carta.pessoa2_foto_url },
   ]
 
   function Avatar({ src, name, size }: { src?: string | null; name: string; size: 'lg' | 'md' | 'sm' | 'saulo' }) {
@@ -330,17 +329,28 @@ export default function PreviewContent({ carta }: { carta: CartaComContribuicoes
           {/* Frase de transição */}
           <div className="intro-phrase">{INTRO_PHRASE}</div>
 
-          {/* Colegas — fotos sempre à esquerda */}
+          {/* Colegas fixos (Mayra e Túlio) */}
           <div className="colleague-list">
-            {colleagues.map((c, i) => (
+            {fixedColleagues.map((c, i) => (
               <div key={i} className="colleague-block">
-                <Avatar src={c.photo} name={c.name ?? ''} size="sm" />
+                <Avatar src={c.photo} name={c.name} size="sm" />
                 <div className="colleague-body">
                   <div className="colleague-name">{c.name}</div>
                   <div className="colleague-role">{c.role}</div>
                   <p className="colleague-message">
                     {c.message ?? <em style={{ color: '#aaa' }}>Mensagem ainda não enviada</em>}
                   </p>
+                </div>
+              </div>
+            ))}
+            {/* Colegas do time Åpen que enviaram via link */}
+            {apenContribs.map((c) => (
+              <div key={c.id} className="colleague-block">
+                <Avatar src={c.foto_remetente_url} name={c.nome_remetente} size="sm" />
+                <div className="colleague-body">
+                  <div className="colleague-name">{c.nome_remetente}</div>
+                  <div className="colleague-role">{c.cargo_remetente ?? ''}</div>
+                  <p className="colleague-message">{c.mensagem}</p>
                 </div>
               </div>
             ))}

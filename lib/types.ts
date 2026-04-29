@@ -23,6 +23,7 @@ export type Contribuicao = {
   id: string
   carta_id: string
   nome_remetente: string
+  cargo_remetente: string | null
   mensagem: string
   foto_remetente_url: string | null
   fotos_familia_urls: string[] | null

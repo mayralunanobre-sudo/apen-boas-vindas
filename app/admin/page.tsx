@@ -21,6 +21,7 @@ export default function AdminListPage() {
   const [authError, setAuthError] = useState('')
   const [cartas, setCartas] = useState<CartaResumo[]>([])
   const [loading, setLoading] = useState(false)
+  const [refreshing, setRefreshing] = useState(false)
 
   // Verifica se já estava logada
   useEffect(() => {
@@ -43,6 +44,17 @@ export default function AdminListPage() {
       setAuthed(true)
     } catch {
       setAuthError('Erro ao verificar senha.')
+    }
+  }
+
+  async function fetchCartas() {
+    setRefreshing(true)
+    try {
+      const r = await fetch('/api/cartas')
+      const data = await r.json()
+      setCartas(data)
+    } finally {
+      setRefreshing(false)
     }
   }
 
@@ -95,7 +107,16 @@ export default function AdminListPage() {
             <img src="/logo-apen.png" alt="Åpen Capital" className="h-6 mb-2" />
             <h1 className="section-title text-2xl">Cartas iniciadas</h1>
           </div>
-          <a href="/" className="btn-secondary text-sm py-2 px-4">+ Nova carta</a>
+          <div className="flex gap-2">
+            <button
+              onClick={fetchCartas}
+              disabled={refreshing}
+              className="btn-secondary text-sm py-2 px-4"
+            >
+              {refreshing ? '...' : '🔄 Atualizar'}
+            </button>
+            <a href="/" className="btn-secondary text-sm py-2 px-4">+ Nova carta</a>
+          </div>
         </div>
 
         {/* Lista */}
@@ -106,6 +127,7 @@ export default function AdminListPage() {
         ) : (
           <div className="space-y-3">
             {cartas.map((carta) => {
+              const apenContribs = carta.contribuicoes.filter((c) => c.pagina === 1)
               const familyContribs = carta.contribuicoes.filter((c) => c.pagina === 2)
               const totalFotos = familyContribs.reduce(
                 (acc, c) => acc + (c.fotos_familia_urls?.length ?? 0), 0
@@ -121,20 +143,11 @@ export default function AdminListPage() {
                         {carta.nome_colaborador}
                       </h2>
 
-                      {/* Status dos internos */}
-                      <div className="flex flex-wrap gap-2 mb-3">
-                        <StatusBadge
-                          nome={carta.pessoa1_nome}
-                          enviou={!!carta.pessoa1_mensagem}
-                        />
-                        <StatusBadge
-                          nome={carta.pessoa2_nome}
-                          enviou={!!carta.pessoa2_mensagem}
-                        />
-                      </div>
-
-                      {/* Família */}
-                      <div className="flex gap-4 text-sm text-gray-500">
+                      {/* Contadores */}
+                      <div className="flex flex-wrap gap-4 text-sm text-gray-500">
+                        <span>
+                          🏢 <strong>{apenContribs.length}</strong> mensage{apenContribs.length !== 1 ? 'ns' : 'm'} do time Åpen
+                        </span>
                         <span>
                           💬 <strong>{familyContribs.length}</strong> recado{familyContribs.length !== 1 ? 's' : ''} da família
                         </span>
@@ -179,14 +192,3 @@ export default function AdminListPage() {
   )
 }
 
-function StatusBadge({ nome, enviou }: { nome: string; enviou: boolean }) {
-  return (
-    <span className={`inline-flex items-center gap-1.5 text-xs font-semibold px-2.5 py-1 rounded-full ${
-      enviou
-        ? 'bg-green-100 text-green-700'
-        : 'bg-yellow-100 text-yellow-700'
-    }`}>
-      {enviou ? '✓' : '○'} {nome}
-    </span>
-  )
-}

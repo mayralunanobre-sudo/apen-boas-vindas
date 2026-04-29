@@ -9,11 +9,12 @@ type Props = {
   carta: Carta & { contribuicoes: Contribuicao[] }
 }
 
-type SenderType = 'pessoa1' | 'pessoa2' | 'familia'
+type SenderType = 'apen' | 'familia'
 
 export default function CartaColaborativa({ carta }: Props) {
   const [senderType, setSenderType] = useState<SenderType | ''>('')
   const [nome, setNome] = useState('')
+  const [cargo, setCargo] = useState('')
   const [mensagem, setMensagem] = useState('')
   const [fotoRemetente, setFotoRemetente] = useState<File | null>(null)
   const [fotosFamilia, setFotosFamilia] = useState<File[]>([])
@@ -22,16 +23,13 @@ export default function CartaColaborativa({ carta }: Props) {
   const [error, setError] = useState('')
   const [contribuicoes, setContribuicoes] = useState(carta.contribuicoes)
 
-  const pessoa1Preenchida = !!carta.pessoa1_mensagem
-  const pessoa2Preenchida = !!carta.pessoa2_mensagem
-
   function handleSenderChange(type: SenderType) {
     setSenderType(type)
-    if (type === 'pessoa1') setNome(carta.pessoa1_nome)
-    else if (type === 'pessoa2') setNome(carta.pessoa2_nome)
-    else setNome('')
+    setNome('')
+    setCargo('')
     setFotoRemetente(null)
     setFotosFamilia([])
+    setError('')
   }
 
   async function handleSubmit(e: FormEvent) {
@@ -49,10 +47,10 @@ export default function CartaColaborativa({ carta }: Props) {
       setLoading(false)
       return
     }
-    if ((senderType === 'pessoa1' || senderType === 'pessoa2') && !fotoRemetente) {
-      setError('Colaboradores da Åpen precisam enviar uma foto.')
-      setLoading(false)
-      return
+    if (senderType === 'apen') {
+      if (!nome.trim()) { setError('Por favor, informe seu nome.'); setLoading(false); return }
+      if (!cargo.trim()) { setError('Por favor, informe seu cargo.'); setLoading(false); return }
+      if (!fotoRemetente) { setError('Colaboradores da Åpen precisam enviar uma foto.'); setLoading(false); return }
     }
     if (senderType === 'familia' && !nome.trim()) {
       setError('Por favor, informe seu nome.')
@@ -64,6 +62,7 @@ export default function CartaColaborativa({ carta }: Props) {
     data.append('carta_id', carta.id)
     data.append('sender_type', senderType)
     data.append('nome_remetente', nome || 'Anônimo')
+    data.append('cargo_remetente', cargo)
     data.append('mensagem', mensagem)
     if (fotoRemetente) data.append('foto_remetente', fotoRemetente)
     fotosFamilia.forEach((f) => data.append('fotos_familia', f))
@@ -87,7 +86,7 @@ export default function CartaColaborativa({ carta }: Props) {
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-white py-8 px-4">
       <div className="max-w-xl mx-auto">
 
-        {/* Header com dados do colaborador */}
+        {/* Header */}
         <div className="card mb-6 text-center">
           <div className="flex justify-center mb-4">
             {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -138,7 +137,7 @@ export default function CartaColaborativa({ carta }: Props) {
           </div>
         )}
 
-        {/* Formulário de envio */}
+        {/* Formulário */}
         {success ? (
           <div className="card text-center py-10">
             <div className="w-16 h-16 bg-apen-dark rounded-full flex items-center justify-center mx-auto mb-4">
@@ -150,20 +149,23 @@ export default function CartaColaborativa({ carta }: Props) {
             <p className="text-gray-600 mb-6">
               Obrigado pelo carinho. Sua mensagem foi registrada na carta de boas-vindas.
             </p>
-            <button
-              onClick={() => {
-                setSuccess(false)
-                setSenderType('')
-                setNome('')
-                setMensagem('')
-                setFotoRemetente(null)
-                setFotosFamilia([])
-                setError('')
-              }}
-              className="btn-secondary"
-            >
-              💬 Enviar outra mensagem
-            </button>
+            {senderType === 'familia' && (
+              <button
+                onClick={() => {
+                  setSuccess(false)
+                  setSenderType('')
+                  setNome('')
+                  setCargo('')
+                  setMensagem('')
+                  setFotoRemetente(null)
+                  setFotosFamilia([])
+                  setError('')
+                }}
+                className="btn-secondary"
+              >
+                💬 Enviar outra mensagem
+              </button>
+            )}
           </div>
         ) : (
           <form onSubmit={handleSubmit} className="card space-y-5">
@@ -173,60 +175,20 @@ export default function CartaColaborativa({ carta }: Props) {
             <div>
               <label className="label">Quem é você? *</label>
               <div className="space-y-2">
-                {!pessoa1Preenchida && (
-                  <label className={`flex items-center gap-3 p-3 rounded-lg border-2 cursor-pointer transition-colors ${senderType === 'pessoa1' ? 'border-apen-dark bg-blue-50' : 'border-gray-200 hover:border-apen-medium'}`}>
-                    <input
-                      type="radio"
-                      name="sender"
-                      value="pessoa1"
-                      checked={senderType === 'pessoa1'}
-                      onChange={() => handleSenderChange('pessoa1')}
-                      className="accent-apen-dark"
-                    />
-                    <div>
-                      <p className="font-semibold text-sm text-apen-dark">{carta.pessoa1_nome}</p>
-                      <p className="text-xs text-gray-500">{carta.pessoa1_cargo} — Åpen Capital</p>
-                    </div>
-                  </label>
-                )}
-                {pessoa1Preenchida && (
-                  <div className="flex items-center gap-3 p-3 rounded-lg border-2 border-blue-200 bg-blue-50 opacity-60">
-                    <svg className="w-5 h-5 text-apen-medium" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                    </svg>
-                    <div>
-                      <p className="font-semibold text-sm text-apen-dark">{carta.pessoa1_nome}</p>
-                      <p className="text-xs text-apen-medium">Já enviou a mensagem</p>
-                    </div>
+                <label className={`flex items-center gap-3 p-3 rounded-lg border-2 cursor-pointer transition-colors ${senderType === 'apen' ? 'border-apen-dark bg-blue-50' : 'border-gray-200 hover:border-apen-medium'}`}>
+                  <input
+                    type="radio"
+                    name="sender"
+                    value="apen"
+                    checked={senderType === 'apen'}
+                    onChange={() => handleSenderChange('apen')}
+                    className="accent-apen-dark"
+                  />
+                  <div>
+                    <p className="font-semibold text-sm text-apen-dark">🏢 Sou do time interno da Åpen</p>
+                    <p className="text-xs text-gray-500">Envie nome, cargo, foto e mensagem</p>
                   </div>
-                )}
-                {!pessoa2Preenchida && (
-                  <label className={`flex items-center gap-3 p-3 rounded-lg border-2 cursor-pointer transition-colors ${senderType === 'pessoa2' ? 'border-apen-dark bg-blue-50' : 'border-gray-200 hover:border-apen-medium'}`}>
-                    <input
-                      type="radio"
-                      name="sender"
-                      value="pessoa2"
-                      checked={senderType === 'pessoa2'}
-                      onChange={() => handleSenderChange('pessoa2')}
-                      className="accent-apen-dark"
-                    />
-                    <div>
-                      <p className="font-semibold text-sm text-apen-dark">{carta.pessoa2_nome}</p>
-                      <p className="text-xs text-gray-500">{carta.pessoa2_cargo} — Åpen Capital</p>
-                    </div>
-                  </label>
-                )}
-                {pessoa2Preenchida && (
-                  <div className="flex items-center gap-3 p-3 rounded-lg border-2 border-blue-200 bg-blue-50 opacity-60">
-                    <svg className="w-5 h-5 text-apen-medium" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                    </svg>
-                    <div>
-                      <p className="font-semibold text-sm text-apen-dark">{carta.pessoa2_nome}</p>
-                      <p className="text-xs text-apen-medium">Já enviou a mensagem</p>
-                    </div>
-                  </div>
-                )}
+                </label>
                 <label className={`flex items-center gap-3 p-3 rounded-lg border-2 cursor-pointer transition-colors ${senderType === 'familia' ? 'border-apen-dark bg-blue-50' : 'border-gray-200 hover:border-apen-medium'}`}>
                   <input
                     type="radio"
@@ -244,7 +206,45 @@ export default function CartaColaborativa({ carta }: Props) {
               </div>
             </div>
 
-            {/* Nome */}
+            {/* Campos do time Åpen */}
+            {senderType === 'apen' && (
+              <>
+                <div className="grid grid-cols-2 gap-3">
+                  <div>
+                    <label className="label">Seu nome *</label>
+                    <input
+                      value={nome}
+                      onChange={(e) => setNome(e.target.value)}
+                      required
+                      placeholder="Nome completo"
+                      className="input-field"
+                    />
+                  </div>
+                  <div>
+                    <label className="label">Seu cargo *</label>
+                    <input
+                      value={cargo}
+                      onChange={(e) => setCargo(e.target.value)}
+                      required
+                      placeholder="Cargo na Åpen"
+                      className="input-field"
+                    />
+                  </div>
+                </div>
+                <div>
+                  <label className="label">Sua foto *</label>
+                  <DropZone
+                    id="foto-rem"
+                    file={fotoRemetente}
+                    onFile={setFotoRemetente}
+                    capture="user"
+                    label="Arraste sua foto aqui ou clique para selecionar"
+                  />
+                </div>
+              </>
+            )}
+
+            {/* Nome para família */}
             {senderType === 'familia' && (
               <div>
                 <label className="label">Seu nome *</label>
@@ -254,20 +254,6 @@ export default function CartaColaborativa({ carta }: Props) {
                   required
                   placeholder="Como você quer ser identificado(a)"
                   className="input-field"
-                />
-              </div>
-            )}
-
-            {/* Foto do remetente — só para colaboradores pré-selecionados */}
-            {(senderType === 'pessoa1' || senderType === 'pessoa2') && (
-              <div>
-                <label className="label">Sua foto *</label>
-                <DropZone
-                  id="foto-rem"
-                  file={fotoRemetente}
-                  onFile={setFotoRemetente}
-                  capture="user"
-                  label="Arraste sua foto aqui ou clique para selecionar"
                 />
               </div>
             )}
@@ -287,7 +273,7 @@ export default function CartaColaborativa({ carta }: Props) {
               </div>
             )}
 
-            {/* Bloco de fotos — só para família, sem limite */}
+            {/* Fotos para família */}
             {senderType === 'familia' && (
               <div className="border border-gray-200 rounded-xl p-4 space-y-3 bg-gray-50">
                 <div>

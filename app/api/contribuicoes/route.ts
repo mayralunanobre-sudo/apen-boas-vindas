@@ -7,8 +7,9 @@ export async function POST(request: Request) {
     const formData = await request.formData()
 
     const cartaId = formData.get('carta_id') as string
-    const senderType = formData.get('sender_type') as 'pessoa1' | 'pessoa2' | 'familia' | 'outro'
+    const senderType = formData.get('sender_type') as 'apen' | 'familia'
     const nomeRemetente = formData.get('nome_remetente') as string
+    const cargoRemetente = formData.get('cargo_remetente') as string | null
     const mensagem = formData.get('mensagem') as string
 
     const contribId = uuidv4()
@@ -37,23 +38,8 @@ export async function POST(request: Request) {
       }
     }
 
-    // Pessoa Extra 1 ou 2: atualiza campos na tabela cartas
-    if (senderType === 'pessoa1' || senderType === 'pessoa2') {
-      const prefix = senderType === 'pessoa1' ? 'pessoa1' : 'pessoa2'
-      const { error } = await supabaseAdmin
-        .from('cartas')
-        .update({
-          [`${prefix}_foto_url`]: fotoRemetenteUrl,
-          [`${prefix}_mensagem`]: mensagem,
-        })
-        .eq('id', cartaId)
-
-      if (error) return NextResponse.json({ error: error.message }, { status: 500 })
-      return NextResponse.json({ ok: true })
-    }
-
-    // Família → página 2 | Outra pessoa → página 1
-    const pagina = senderType === 'familia' ? 2 : 1
+    // Time Åpen → página 1 | Família → página 2
+    const pagina = senderType === 'apen' ? 1 : 2
 
     const { data, error } = await supabaseAdmin
       .from('contribuicoes')
@@ -61,6 +47,7 @@ export async function POST(request: Request) {
         id: contribId,
         carta_id: cartaId,
         nome_remetente: nomeRemetente,
+        cargo_remetente: cargoRemetente || null,
         mensagem,
         foto_remetente_url: fotoRemetenteUrl,
         fotos_familia_urls: fotosFamiliaUrls.length > 0 ? fotosFamiliaUrls : null,

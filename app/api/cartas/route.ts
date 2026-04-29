@@ -30,10 +30,6 @@ export async function POST(request: Request) {
     const mensagemAdmin = formData.get('mensagem_admin') as string
     const mensagemSaulo = formData.get('mensagem_saulo') as string
     const mensagemTulio = formData.get('mensagem_tulio') as string
-    const pessoa1Nome = formData.get('pessoa1_nome') as string
-    const pessoa1Cargo = formData.get('pessoa1_cargo') as string
-    const pessoa2Nome = formData.get('pessoa2_nome') as string
-    const pessoa2Cargo = formData.get('pessoa2_cargo') as string
 
     let fotoColaboradorUrl: string | null = null
 
@@ -58,10 +54,6 @@ export async function POST(request: Request) {
         foto_admin_url: null,
         mensagem_saulo: mensagemSaulo,
         mensagem_tulio: mensagemTulio,
-        pessoa1_nome: pessoa1Nome,
-        pessoa1_cargo: pessoa1Cargo,
-        pessoa2_nome: pessoa2Nome,
-        pessoa2_cargo: pessoa2Cargo,
       })
       .select()
       .single()

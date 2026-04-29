@@ -12,10 +12,6 @@ type FormState = {
   mensagem_admin: string
   mensagem_saulo: string
   mensagem_tulio: string
-  pessoa1_nome: string
-  pessoa1_cargo: string
-  pessoa2_nome: string
-  pessoa2_cargo: string
 }
 
 export default function CriarCartaPage() {
@@ -24,10 +20,6 @@ export default function CriarCartaPage() {
     mensagem_admin: '',
     mensagem_saulo: DEFAULT_SAULO,
     mensagem_tulio: DEFAULT_TULIO,
-    pessoa1_nome: '',
-    pessoa1_cargo: '',
-    pessoa2_nome: '',
-    pessoa2_cargo: '',
   })
   const [fotoColaborador, setFotoColaborador] = useState<File | null>(null)
   const [loading, setLoading] = useState(false)
@@ -213,73 +205,6 @@ export default function CriarCartaPage() {
                 rows={4}
                 className="input-field resize-none"
               />
-            </div>
-          </div>
-
-          {/* Seção: Pessoa Extra 1 */}
-          <div className="card">
-            <h2 className="text-lg font-bold text-apen-dark mb-1 flex items-center gap-2">
-              <span className="w-7 h-7 bg-apen-dark text-white rounded-full text-sm flex items-center justify-center">5</span>
-              Colaborador Åpen — Pessoa 1
-            </h2>
-            <p className="text-sm text-gray-500 mb-4">Esta pessoa receberá o link e preencherá a foto e mensagem por conta própria.</p>
-            <div className="grid grid-cols-2 gap-4">
-              <div>
-                <label className="label">Nome *</label>
-                <input
-                  name="pessoa1_nome"
-                  value={form.pessoa1_nome}
-                  onChange={handleChange}
-                  required
-                  placeholder="Nome completo"
-                  className="input-field"
-                />
-              </div>
-              <div>
-                <label className="label">Cargo *</label>
-                <input
-                  name="pessoa1_cargo"
-                  value={form.pessoa1_cargo}
-                  onChange={handleChange}
-                  required
-                  placeholder="Cargo na empresa"
-                  className="input-field"
-                />
-              </div>
-            </div>
-          </div>
-
-          {/* Seção: Pessoa Extra 2 */}
-          <div className="card">
-            <h2 className="text-lg font-bold text-apen-dark mb-1 flex items-center gap-2">
-              <span className="w-7 h-7 bg-apen-dark text-white rounded-full text-sm flex items-center justify-center">6</span>
-              Colaborador Åpen — Pessoa 2
-            </h2>
-            <p className="text-sm text-gray-500 mb-4">Mesma dinâmica da Pessoa 1 — preencherá via link.</p>
-
-            <div className="grid grid-cols-2 gap-4">
-              <div>
-                <label className="label">Nome *</label>
-                <input
-                  name="pessoa2_nome"
-                  value={form.pessoa2_nome}
-                  onChange={handleChange}
-                  required
-                  placeholder="Nome completo"
-                  className="input-field"
-                />
-              </div>
-              <div>
-                <label className="label">Cargo *</label>
-                <input
-                  name="pessoa2_cargo"
-                  value={form.pessoa2_cargo}
-                  onChange={handleChange}
-                  required
-                  placeholder="Cargo na empresa"
-                  className="input-field"
-                />
-              </div>
             </div>
           </div>
 

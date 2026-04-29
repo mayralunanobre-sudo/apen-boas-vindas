@@ -141,8 +141,6 @@ export default function AdminPanel({ carta: initialCarta }: Props) {
     )
   }
 
-  const p1Ok = !!carta.pessoa1_mensagem
-  const p2Ok = !!carta.pessoa2_mensagem
   const contrib1 = carta.contribuicoes.filter((c) => c.pagina === 1)
   const contrib2 = carta.contribuicoes.filter((c) => c.pagina === 2)
   const cartaUrl = `${window.location.origin}/carta/${carta.id}`
@@ -220,10 +218,13 @@ export default function AdminPanel({ carta: initialCarta }: Props) {
         <div className="card">
           <h3 className="font-bold text-apen-dark mb-4">Status de preenchimento</h3>
           <div className="space-y-3">
+            <StatusItem label="Saulo Godoy (Sócio Fundador)" done={true} />
             <StatusItem label="Mayra Luna (Diretora de Operações)" done={!!carta.mensagem_admin} />
             <StatusItem label="Túlio Cavalcanti (mensagem fixa)" done={true} />
-            <StatusItem label={`${carta.pessoa1_nome} (${carta.pessoa1_cargo})`} done={p1Ok} />
-            <StatusItem label={`${carta.pessoa2_nome} (${carta.pessoa2_cargo})`} done={p2Ok} />
+            <StatusItem
+              label={`Time Åpen — ${contrib1.length} mensage${contrib1.length !== 1 ? 'ns' : 'm'} recebida${contrib1.length !== 1 ? 's' : ''} via link`}
+              done={contrib1.length > 0}
+            />
           </div>
         </div>
 
