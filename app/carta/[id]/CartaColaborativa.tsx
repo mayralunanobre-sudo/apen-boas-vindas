@@ -257,7 +257,7 @@ export default function CartaColaborativa({ carta }: Props) {
               <div className="border border-gray-200 rounded-xl p-4 space-y-3 bg-gray-50">
                 <div>
                   <p className="font-semibold text-sm text-apen-dark">📸 Fotos</p>
-                  <p className="text-xs text-gray-500 mt-0.5">Envie quantas fotos quiser — elas aparecerão na carta</p>
+                  <p className="text-xs text-gray-500 mt-0.5">Envie quantas quiser — elas aparecerão na carta</p>
                 </div>
                 <DropZone
                   id="fotos-fam"
