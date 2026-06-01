@@ -8,16 +8,21 @@ export async function GET() {
   try {
     const { data: cartas, error } = await supabaseAdmin
       .from('cartas')
-      .select(`
-        id, nome_colaborador, criado_em,
-        pessoa1_nome, pessoa1_mensagem,
-        pessoa2_nome, pessoa2_mensagem,
-        contribuicoes ( id, pagina, fotos_familia_urls )
-      `)
+      .select('id, nome_colaborador, criado_em')
       .order('criado_em', { ascending: false })
 
     if (error) return NextResponse.json({ error: error.message }, { status: 500 })
-    return NextResponse.json(cartas, { headers: { 'Cache-Control': 'no-store' } })
+
+    const { data: contribs } = await supabaseAdmin
+      .from('contribuicoes')
+      .select('id, carta_id, pagina, fotos_familia_urls')
+
+    const result = (cartas ?? []).map((carta) => ({
+      ...carta,
+      contribuicoes: (contribs ?? []).filter((c) => c.carta_id === carta.id),
+    }))
+
+    return NextResponse.json(result, { headers: { 'Cache-Control': 'no-store' } })
   } catch (err) {
     return NextResponse.json({ error: String(err) }, { status: 500 })
   }

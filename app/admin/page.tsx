@@ -52,7 +52,7 @@ export default function AdminListPage() {
     try {
       const r = await fetch('/api/cartas')
       const data = await r.json()
-      setCartas(data)
+      if (Array.isArray(data)) setCartas(data)
     } finally {
       setRefreshing(false)
     }
@@ -63,7 +63,7 @@ export default function AdminListPage() {
     setLoading(true)
     fetch('/api/cartas')
       .then((r) => r.json())
-      .then((data) => setCartas(data))
+      .then((data) => { if (Array.isArray(data)) setCartas(data) })
       .finally(() => setLoading(false))
   }, [authed])
 
