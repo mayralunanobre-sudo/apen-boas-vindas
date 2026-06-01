@@ -11,7 +11,7 @@ type CartaResumo = {
 
 const AUTH_KEY = 'apen_admin_authed'
 
-export default function AdminListClient({ cartas }: { cartas: CartaResumo[] }) {
+export default function AdminListClient({ cartas, debug }: { cartas: CartaResumo[]; debug?: string }) {
   const [authed, setAuthed] = useState(false)
   const [password, setPassword] = useState('')
   const [authError, setAuthError] = useState('')
@@ -88,7 +88,10 @@ export default function AdminListClient({ cartas }: { cartas: CartaResumo[] }) {
         </div>
 
         {cartas.length === 0 ? (
-          <div className="card text-center text-gray-400 py-20">Nenhuma carta criada ainda.</div>
+          <div className="card text-center text-gray-400 py-20">
+            Nenhuma carta criada ainda.
+            {debug && <p className="text-xs mt-2 text-red-400">{debug}</p>}
+          </div>
         ) : (
           <div className="space-y-3">
             {cartas.map((carta) => {
