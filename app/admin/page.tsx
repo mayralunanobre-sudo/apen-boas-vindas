@@ -127,8 +127,8 @@ export default function AdminListPage() {
         ) : (
           <div className="space-y-3">
             {cartas.map((carta) => {
-              const apenContribs = carta.contribuicoes.filter((c) => c.pagina === 1)
-              const familyContribs = carta.contribuicoes.filter((c) => c.pagina === 2)
+              const apenContribs = (carta.contribuicoes ?? []).filter((c) => c.pagina === 1)
+              const familyContribs = (carta.contribuicoes ?? []).filter((c) => c.pagina === 2)
               const totalFotos = familyContribs.reduce(
                 (acc, c) => acc + (c.fotos_familia_urls?.length ?? 0), 0
               )
