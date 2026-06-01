@@ -42,7 +42,7 @@ const PRINT_CSS = `
 
   /* ── CONTEÚDO ── */
   .content-cell {
-    padding: 8mm 16mm 12mm;
+    padding: 10mm 16mm 12mm;
     vertical-align: top;
   }
 
@@ -168,7 +168,7 @@ const PRINT_CSS = `
     }
 
     /* Espaço no fundo do conteúdo para não ficar atrás do rodapé fixo */
-    .content-cell { padding-bottom: 42mm !important; }
+    .content-cell { padding-top: 10mm !important; padding-bottom: 44mm !important; }
   }
 
   @page { size: A4; margin: 0; }
@@ -216,7 +216,15 @@ export default function PreviewContent({ carta }: { carta: CartaComContribuicoes
 
       {/* Rodapé fixo — só aparece no print, em TODAS as páginas */}
       <div className="print-footer-fixed">
-        <FooterInner />
+        <div style={{
+          backgroundColor: '#162040',
+          display: 'flex',
+          flexDirection: 'row',
+          width: '100%',
+          WebkitPrintColorAdjust: 'exact',
+        } as React.CSSProperties}>
+          <FooterInner />
+        </div>
       </div>
 
       {/* Tabela principal */}
