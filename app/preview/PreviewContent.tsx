@@ -305,14 +305,16 @@ export default function PreviewContent({ carta }: { carta: CartaComContribuicoes
               {familyContribs.length > 0 && (
                 <>
                   <p className="family-phrase">{FAMILY_PHRASE}</p>
-                  <div className="family-grid">
-                    {familyContribs.map((c) => (
-                      <div key={c.id} className="family-card">
-                        <div className="family-card-name">{c.nome_remetente}</div>
-                        <p className="family-card-message">{c.mensagem}</p>
-                      </div>
-                    ))}
-                  </div>
+                  {familyContribs.some((c) => c.mensagem?.trim()) && (
+                    <div className="family-grid">
+                      {familyContribs.filter((c) => c.mensagem?.trim()).map((c) => (
+                        <div key={c.id} className="family-card">
+                          <div className="family-card-name">{c.nome_remetente}</div>
+                          <p className="family-card-message">{c.mensagem}</p>
+                        </div>
+                      ))}
+                    </div>
+                  )}
                 </>
               )}
 
