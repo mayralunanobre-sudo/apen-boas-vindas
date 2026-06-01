@@ -167,8 +167,11 @@ const PRINT_CSS = `
       -webkit-print-color-adjust: exact !important;
     }
 
+    /* Espaço após cabeçalho (em todas as páginas que ele repete) */
+    .header-cell { padding-bottom: 10mm !important; }
+
     /* Espaço no fundo do conteúdo para não ficar atrás do rodapé fixo */
-    .content-cell { padding-top: 10mm !important; padding-bottom: 44mm !important; }
+    .content-cell { padding-top: 0 !important; padding-bottom: 55mm !important; }
   }
 
   @page { size: A4; margin: 0; }
