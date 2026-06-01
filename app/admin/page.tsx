@@ -50,7 +50,7 @@ export default function AdminListPage() {
   async function fetchCartas() {
     setRefreshing(true)
     try {
-      const r = await fetch('/api/cartas')
+      const r = await fetch('/api/admin/cartas')
       const data = await r.json()
       if (Array.isArray(data)) setCartas(data)
     } finally {
@@ -61,7 +61,7 @@ export default function AdminListPage() {
   useEffect(() => {
     if (!authed) return
     setLoading(true)
-    fetch('/api/cartas')
+    fetch('/api/admin/cartas')
       .then((r) => r.json())
       .then((data) => { if (Array.isArray(data)) setCartas(data) })
       .finally(() => setLoading(false))

@@ -2,8 +2,6 @@ import { NextResponse } from 'next/server'
 import { supabaseAdmin, uploadFromFormFile } from '@/lib/supabase-admin'
 import { v4 as uuidv4 } from 'uuid'
 
-export const dynamic = 'force-dynamic'
-
 export async function GET() {
   try {
     const { data: cartas, error } = await supabaseAdmin
