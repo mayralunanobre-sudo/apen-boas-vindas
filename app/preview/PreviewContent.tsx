@@ -121,8 +121,8 @@ const PRINT_CSS = `
   .colleague-message { font-size:11px; line-height:1.65; color:#333; }
 
   /* ── FAMÍLIA ── */
-  .family-grid { columns:2; gap:12px; margin-bottom:20px; }
-  .family-card { background:#fffde8; border:1px solid #e8d840; border-radius:6px; padding:10px 12px; margin-bottom:10px; box-shadow:2px 2px 6px rgba(0,0,0,0.09); break-inside:avoid; }
+  .family-grid { display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:20px; }
+  .family-card { background:#fffde8; border:1px solid #e8d840; border-radius:6px; padding:10px 12px; box-shadow:2px 2px 6px rgba(0,0,0,0.09); break-inside:avoid; page-break-inside:avoid; -webkit-column-break-inside:avoid; }
   .family-card-name { font-family:'Dancing Script',cursive; font-size:14px; color:#162040; margin-bottom:4px; }
   .family-card-message { font-size:10.5px; line-height:1.6; color:#333; }
 
