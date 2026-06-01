@@ -42,12 +42,61 @@ const PRINT_CSS = `
     flex: 1;
   }
 
+  /* Elementos fixos para print — ocultos na tela */
+  .print-fixed-header,
+  .print-fixed-footer { display: none; }
+
   @media print {
     body { background: white !important; }
     .preview-root { background: white; padding: 0; }
-    .page { margin: 0; box-shadow: none; page-break-after: always; }
+    .page { margin: 0; box-shadow: none; page-break-after: always; overflow: visible; }
     .page:last-child { page-break-after: avoid; }
     .no-print { display: none !important; }
+
+    /* Cabeçalho fixo em todas as páginas */
+    .print-fixed-header {
+      display: flex;
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      background: white;
+      z-index: 100;
+      align-items: center;
+      gap: 14px;
+      padding: 7mm 16mm 5mm;
+      border-bottom: 3px solid #162040;
+    }
+    .print-fixed-header .avatar-sm-print {
+      width: 70px; height: 70px;
+      border-radius: 50%; object-fit: cover;
+      border: 3px solid #162040; flex-shrink: 0;
+    }
+    .print-fixed-header .avatar-placeholder-sm {
+      width: 70px; height: 70px;
+      border-radius: 50%; border: 3px solid #162040;
+      background: #d0d8ee; display: flex; align-items: center;
+      justify-content: center; font-weight: bold; color: #162040;
+      font-size: 22px; flex-shrink: 0;
+    }
+
+    /* Rodapé fixo em todas as páginas */
+    .print-fixed-footer {
+      display: flex;
+      position: fixed;
+      bottom: 0; left: 0; right: 0;
+      background: #162040;
+      z-index: 100;
+      flex-direction: row;
+    }
+
+    /* Esconde cabeçalho/rodapé embutidos nas páginas (evita duplicar) */
+    .carta-header { display: none !important; }
+    .navy-footer { display: none !important; }
+
+    /* Ajusta padding do conteúdo para não sobrepor com fixos */
+    .page-content {
+      padding-top: 35mm !important;
+      padding-bottom: 48mm !important;
+    }
   }
 
   @page { size: A4; margin: 0; }
@@ -299,6 +348,31 @@ export default function PreviewContent({ carta }: { carta: CartaComContribuicoes
       {/* eslint-disable-next-line react/no-danger */}
       <style dangerouslySetInnerHTML={{ __html: PRINT_CSS }} />
       <PrintButton />
+
+      {/* ── Cabeçalho fixo (só aparece no print) ── */}
+      <div className="print-fixed-header">
+        {carta.foto_colaborador_url
+          ? <img src={carta.foto_colaborador_url} alt={carta.nome_colaborador} className="avatar-sm-print" />
+          : <div className="avatar-placeholder-sm">{carta.nome_colaborador.charAt(0).toUpperCase()}</div>
+        }
+        <div className="carta-header-text">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src="/logo-apen.png" alt="Åpen Capital" style={{ height: '16px', marginBottom: '3px', display: 'block' }} />
+          <div className="font-cursive" style={{ fontSize: '28px', color: '#162040', lineHeight: 1.1 }}>
+            {carta.nome_colaborador}
+          </div>
+        </div>
+      </div>
+
+      {/* ── Rodapé fixo (só aparece no print) ── */}
+      <div className="print-fixed-footer">
+        <div className="footer-label">Valores da Åpen</div>
+        <div className="footer-values">
+          {APEN_VALUES.map((v, i) => (
+            <div key={i} className="value-item">{v}</div>
+          ))}
+        </div>
+      </div>
 
       {/* ════════════════ PÁGINA 1 ════════════════ */}
       <div className="page">
