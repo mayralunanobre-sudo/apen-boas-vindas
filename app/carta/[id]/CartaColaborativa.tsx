@@ -42,18 +42,8 @@ export default function CartaColaborativa({ carta }: Props) {
       setLoading(false)
       return
     }
-    if (!mensagem.trim()) {
-      setError('Por favor, escreva uma mensagem.')
-      setLoading(false)
-      return
-    }
-    if (senderType === 'apen') {
-      if (!nome.trim()) { setError('Por favor, informe seu nome.'); setLoading(false); return }
-      if (!cargo.trim()) { setError('Por favor, informe seu cargo.'); setLoading(false); return }
-      if (!fotoRemetente) { setError('Colaboradores da Åpen precisam enviar uma foto.'); setLoading(false); return }
-    }
-    if (senderType === 'familia' && !nome.trim()) {
-      setError('Por favor, informe seu nome.')
+    if (senderType === 'apen' && !fotoRemetente) {
+      setError('Colaboradores da Åpen precisam enviar uma foto.')
       setLoading(false)
       return
     }
@@ -190,21 +180,19 @@ export default function CartaColaborativa({ carta }: Props) {
               <>
                 <div className="grid grid-cols-2 gap-3">
                   <div>
-                    <label className="label">Seu nome *</label>
+                    <label className="label">Seu nome</label>
                     <input
                       value={nome}
                       onChange={(e) => setNome(e.target.value)}
-                      required
                       placeholder="Nome completo"
                       className="input-field"
                     />
                   </div>
                   <div>
-                    <label className="label">Seu cargo *</label>
+                    <label className="label">Seu cargo</label>
                     <input
                       value={cargo}
                       onChange={(e) => setCargo(e.target.value)}
-                      required
                       placeholder="Cargo na Åpen"
                       className="input-field"
                     />
@@ -226,11 +214,10 @@ export default function CartaColaborativa({ carta }: Props) {
             {/* Nome para família */}
             {senderType === 'familia' && (
               <div>
-                <label className="label">Seu nome *</label>
+                <label className="label">Seu nome</label>
                 <input
                   value={nome}
                   onChange={(e) => setNome(e.target.value)}
-                  required
                   placeholder="Como você quer ser identificado(a)"
                   className="input-field"
                 />
@@ -240,11 +227,10 @@ export default function CartaColaborativa({ carta }: Props) {
             {/* Mensagem */}
             {senderType && (
               <div>
-                <label className="label">Sua mensagem *</label>
+                <label className="label">Sua mensagem</label>
                 <textarea
                   value={mensagem}
                   onChange={(e) => setMensagem(e.target.value)}
-                  required
                   rows={4}
                   placeholder="Escreva um recado especial de boas-vindas..."
                   className="input-field resize-none"
