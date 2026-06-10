@@ -146,33 +146,15 @@ const PRINT_CSS = `
       -webkit-print-color-adjust: exact;
     }
 
-    /* Rodapé: fixo no fundo de cada página */
-    .footer-screen { display: none !important; }
-    .print-footer-fixed {
-      display: flex !important;
-      position: fixed;
-      bottom: 0; left: 0; right: 0;
-      z-index: 9999;
-      flex-direction: row;
-      background: #162040 !important;
-      -webkit-print-color-adjust: exact !important;
-      print-color-adjust: exact !important;
-    }
-    .print-footer-fixed .footer-label {
-      background: rgba(0,0,0,0.15) !important;
-      -webkit-print-color-adjust: exact !important;
-    }
-    .print-footer-fixed .value-item {
-      background: rgba(255,255,255,0.06) !important;
-      -webkit-print-color-adjust: exact !important;
+    /* Rodapé: apenas no final do documento, sem posição fixa */
+    .print-footer-fixed { display: none !important; }
+    .footer-screen {
+      display: table-footer-group !important;
     }
 
-    /* Espaço após cabeçalho (em todas as páginas que ele repete) */
+    /* Espaço após cabeçalho repetido e no conteúdo */
     .header-cell { padding-bottom: 10mm !important; }
-
-    /* Espaço no início do conteúdo após cada cabeçalho repetido */
-    /* Padding-bottom garante que o texto nunca chegue atrás do rodapé fixo */
-    .content-cell { padding-top: 8mm !important; padding-bottom: 60mm !important; }
+    .content-cell { padding-top: 8mm !important; padding-bottom: 10mm !important; }
   }
 
   @page { size: A4; margin: 0; }
