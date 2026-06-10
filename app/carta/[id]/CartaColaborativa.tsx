@@ -204,7 +204,6 @@ export default function CartaColaborativa({ carta }: Props) {
                     id="foto-rem"
                     file={fotoRemetente}
                     onFile={setFotoRemetente}
-                    capture="user"
                     label="Arraste sua foto aqui ou clique para selecionar"
                   />
                 </div>
