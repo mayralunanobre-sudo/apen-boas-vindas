@@ -145,33 +145,52 @@ const PRINT_CSS = `
     }
 
     .print-footer-fixed { display: none !important; }
-    .footer-inline {
-      border-radius: 0 !important;
-      overflow: visible !important;
-      -webkit-print-color-adjust: exact !important;
-      print-color-adjust: exact !important;
-    }
+
+    /* Substitui o layout complexo por um rodapé simples e confiável no PDF */
+    .footer-inline { border-radius: 0 !important; }
     .footer-inner {
       background: #162040 !important;
+      flex-direction: column !important;
+      padding: 8px 16px !important;
       -webkit-print-color-adjust: exact !important;
       print-color-adjust: exact !important;
     }
     .footer-label {
+      writing-mode: horizontal-tb !important;
+      transform: none !important;
+      border-right: none !important;
+      border-bottom: 1px solid rgba(255,255,255,0.3) !important;
+      padding: 0 0 5px 0 !important;
+      margin-bottom: 6px !important;
       color: white !important;
-      background: rgba(0,0,0,0.15) !important;
+      background: none !important;
+      font-size: 10px !important;
+      font-weight: 700 !important;
+      letter-spacing: 1px !important;
+      text-transform: uppercase !important;
       -webkit-print-color-adjust: exact !important;
       print-color-adjust: exact !important;
     }
     .footer-values {
+      flex-direction: row !important;
+      flex-wrap: wrap !important;
+      gap: 4px 12px !important;
+      padding: 0 !important;
       -webkit-print-color-adjust: exact !important;
       print-color-adjust: exact !important;
     }
     .value-item {
       color: white !important;
-      border-color: rgba(255,255,255,0.4) !important;
-      background: rgba(255,255,255,0.06) !important;
+      border: none !important;
+      background: none !important;
+      padding: 0 !important;
+      font-size: 9px !important;
+      border-radius: 0 !important;
       -webkit-print-color-adjust: exact !important;
       print-color-adjust: exact !important;
+    }
+    .value-item::before {
+      content: "· " !important;
     }
     .header-cell { padding-bottom: 10mm !important; }
     .content-cell { padding-top: 8mm !important; padding-bottom: 6mm !important; }
