@@ -1,6 +1,7 @@
 -- Tabela principal das cartas
 create table if not exists cartas (
   id                   uuid primary key default gen_random_uuid(),
+  slug                 text unique,
   nome_colaborador     text not null,
   foto_colaborador_url text,
   nome_admin           text not null,
