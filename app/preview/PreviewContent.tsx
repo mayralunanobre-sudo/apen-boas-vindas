@@ -147,6 +147,7 @@ const PRINT_CSS = `
     .print-footer-fixed { display: none !important; }
     .footer-inline {
       border-radius: 0 !important;
+      overflow: visible !important;
       -webkit-print-color-adjust: exact !important;
       print-color-adjust: exact !important;
     }
@@ -156,12 +157,21 @@ const PRINT_CSS = `
       print-color-adjust: exact !important;
     }
     .footer-label {
+      color: white !important;
       background: rgba(0,0,0,0.15) !important;
       -webkit-print-color-adjust: exact !important;
+      print-color-adjust: exact !important;
+    }
+    .footer-values {
+      -webkit-print-color-adjust: exact !important;
+      print-color-adjust: exact !important;
     }
     .value-item {
+      color: white !important;
+      border-color: rgba(255,255,255,0.4) !important;
       background: rgba(255,255,255,0.06) !important;
       -webkit-print-color-adjust: exact !important;
+      print-color-adjust: exact !important;
     }
     .header-cell { padding-bottom: 10mm !important; }
     .content-cell { padding-top: 8mm !important; padding-bottom: 6mm !important; }
