@@ -171,11 +171,11 @@ const PRINT_CSS = `
     .header-cell { padding-bottom: 10mm !important; }
 
     /* Espaço no início do conteúdo após cada cabeçalho repetido */
-    .content-cell { padding-top: 8mm !important; padding-bottom: 0 !important; }
+    /* Padding-bottom garante que o texto nunca chegue atrás do rodapé fixo */
+    .content-cell { padding-top: 8mm !important; padding-bottom: 60mm !important; }
   }
 
-  /* Margem inferior reserva espaço para o rodapé fixo em todas as páginas */
-  @page { size: A4; margin: 0 0 48mm 0; }
+  @page { size: A4; margin: 0; }
 `
 
 export default function PreviewContent({ carta }: { carta: CartaComContribuicoes }) {
