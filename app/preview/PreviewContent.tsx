@@ -146,10 +146,38 @@ const PRINT_CSS = `
       -webkit-print-color-adjust: exact;
     }
 
-    /* Rodapé: apenas no final do documento, sem posição fixa */
+    /* Rodapé: apenas no final, estilo limpo sem fundo colorido */
     .print-footer-fixed { display: none !important; }
-    .footer-screen {
-      display: table-footer-group !important;
+    .footer-screen { display: table-footer-group !important; }
+    .footer-inner {
+      background: none !important;
+      border-top: 3px solid #162040 !important;
+      flex-direction: column !important;
+      padding: 6mm 16mm !important;
+    }
+    .footer-label {
+      writing-mode: horizontal-tb !important;
+      transform: none !important;
+      border-right: none !important;
+      border-bottom: 1.5px solid #162040 !important;
+      padding: 0 0 4px !important;
+      margin-bottom: 6px !important;
+      color: #162040 !important;
+      background: none !important;
+      font-size: 13px !important;
+      letter-spacing: 0.5px !important;
+    }
+    .footer-values {
+      flex-direction: row !important;
+      flex-wrap: wrap !important;
+      gap: 6px !important;
+      padding: 0 !important;
+    }
+    .value-item {
+      color: #162040 !important;
+      border-color: #162040 !important;
+      background: none !important;
+      font-size: 9px !important;
     }
 
     /* Espaço após cabeçalho repetido e no conteúdo */
