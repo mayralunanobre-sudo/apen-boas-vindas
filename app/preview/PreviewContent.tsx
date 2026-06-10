@@ -46,16 +46,14 @@ const PRINT_CSS = `
     vertical-align: top;
   }
 
-  /* ── RODAPÉ (tela: no final; print: fixo em toda página) ── */
-  .footer-screen {
+  /* ── RODAPÉ ── */
+  .footer-inline {
+    margin-top: 16px;
     background: #162040;
     -webkit-print-color-adjust: exact;
     print-color-adjust: exact;
-  }
-  .footer-screen td {
-    padding: 0;
-    -webkit-print-color-adjust: exact;
-    print-color-adjust: exact;
+    border-radius: 6px;
+    overflow: hidden;
   }
   .footer-inner {
     background: #162040;
@@ -146,43 +144,27 @@ const PRINT_CSS = `
       -webkit-print-color-adjust: exact;
     }
 
-    /* Rodapé: apenas no final, estilo limpo sem fundo colorido */
     .print-footer-fixed { display: none !important; }
-    .footer-screen { display: table-footer-group !important; }
+    .footer-inline {
+      border-radius: 0 !important;
+      -webkit-print-color-adjust: exact !important;
+      print-color-adjust: exact !important;
+    }
     .footer-inner {
-      background: none !important;
-      border-top: 3px solid #162040 !important;
-      flex-direction: column !important;
-      padding: 6mm 16mm !important;
+      background: #162040 !important;
+      -webkit-print-color-adjust: exact !important;
+      print-color-adjust: exact !important;
     }
     .footer-label {
-      writing-mode: horizontal-tb !important;
-      transform: none !important;
-      border-right: none !important;
-      border-bottom: 1.5px solid #162040 !important;
-      padding: 0 0 4px !important;
-      margin-bottom: 6px !important;
-      color: #162040 !important;
-      background: none !important;
-      font-size: 13px !important;
-      letter-spacing: 0.5px !important;
-    }
-    .footer-values {
-      flex-direction: row !important;
-      flex-wrap: wrap !important;
-      gap: 6px !important;
-      padding: 0 !important;
+      background: rgba(0,0,0,0.15) !important;
+      -webkit-print-color-adjust: exact !important;
     }
     .value-item {
-      color: #162040 !important;
-      border-color: #162040 !important;
-      background: none !important;
-      font-size: 9px !important;
+      background: rgba(255,255,255,0.06) !important;
+      -webkit-print-color-adjust: exact !important;
     }
-
-    /* Espaço após cabeçalho repetido e no conteúdo */
     .header-cell { padding-bottom: 10mm !important; }
-    .content-cell { padding-top: 8mm !important; padding-bottom: 10mm !important; }
+    .content-cell { padding-top: 8mm !important; padding-bottom: 6mm !important; }
   }
 
   @page { size: A4; margin: 0; }
@@ -228,19 +210,6 @@ export default function PreviewContent({ carta }: { carta: CartaComContribuicoes
       <style dangerouslySetInnerHTML={{ __html: PRINT_CSS }} />
       <PrintButton />
 
-      {/* Rodapé fixo — só aparece no print, em TODAS as páginas */}
-      <div className="print-footer-fixed">
-        <div style={{
-          backgroundColor: '#162040',
-          display: 'flex',
-          flexDirection: 'row',
-          width: '100%',
-          WebkitPrintColorAdjust: 'exact',
-        } as React.CSSProperties}>
-          <FooterInner />
-        </div>
-      </div>
-
       {/* Tabela principal */}
       <table className="carta-table">
 
@@ -261,13 +230,6 @@ export default function PreviewContent({ carta }: { carta: CartaComContribuicoes
             </td>
           </tr>
         </thead>
-
-        {/* TFOOT: aparece no final (tela) */}
-        <tfoot className="footer-screen">
-          <tr>
-            <td><FooterInner /></td>
-          </tr>
-        </tfoot>
 
         {/* TBODY: todo o conteúdo */}
         <tbody>
@@ -341,6 +303,11 @@ export default function PreviewContent({ carta }: { carta: CartaComContribuicoes
                   </div>
                 </>
               )}
+
+              {/* Rodapé inline — aparece no fim do conteúdo, sem tfoot */}
+              <div className="footer-inline">
+                <FooterInner />
+              </div>
 
             </td>
           </tr>
