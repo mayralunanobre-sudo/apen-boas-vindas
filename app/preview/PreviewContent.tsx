@@ -127,7 +127,7 @@ const PRINT_CSS = `
   /* ── FOTOS ── */
   .photos-title { font-family:'Dancing Script',cursive; font-size:17px; color:#162040; margin-bottom:10px; margin-top:6px; }
   .photos-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:10px; }
-  .photo-img { width:100%; height:190px; object-fit:cover; border-radius:8px; border:2px solid #1e3260; break-inside:avoid; }
+  .photo-img { width:100%; height:auto; object-fit:contain; border-radius:8px; border:2px solid #1e3260; break-inside:avoid; display:block; }
 
   /* ── PRINT ── */
   @media print {
