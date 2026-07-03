@@ -1,5 +1,6 @@
 export type Carta = {
   id: string
+  slug: string | null
   nome_colaborador: string
   foto_colaborador_url: string | null
   nome_admin: string

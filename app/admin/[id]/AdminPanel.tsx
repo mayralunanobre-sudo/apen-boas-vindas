@@ -143,7 +143,7 @@ export default function AdminPanel({ carta: initialCarta }: Props) {
 
   const contrib1 = carta.contribuicoes.filter((c) => c.pagina === 1)
   const contrib2 = carta.contribuicoes.filter((c) => c.pagina === 2)
-  const cartaUrl = `${window.location.origin}/carta/${carta.id}`
+  const cartaUrl = `${window.location.origin}/carta/${carta.slug ?? carta.id}`
 
   return (
     <div className="min-h-screen bg-gray-50 py-8 px-4">
