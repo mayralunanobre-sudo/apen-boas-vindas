@@ -27,6 +27,31 @@ export default function AdminPanel({ carta: initialCarta }: Props) {
   const [deletingId, setDeletingId] = useState<string | null>(null)
   const [movingId, setMovingId] = useState<string | null>(null)
   const [refreshing, setRefreshing] = useState(false)
+  const [editingMessages, setEditingMessages] = useState(false)
+  const [msgAdmin, setMsgAdmin] = useState(carta.mensagem_admin ?? '')
+  const [msgSaulo, setMsgSaulo] = useState(carta.mensagem_saulo ?? '')
+  const [msgTulio, setMsgTulio] = useState(carta.mensagem_tulio ?? '')
+  const [savingMessages, setSavingMessages] = useState(false)
+  const [saveError, setSaveError] = useState('')
+
+  async function handleSaveMessages() {
+    setSavingMessages(true)
+    setSaveError('')
+    try {
+      const res = await fetch(`/api/cartas/${carta.id}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ mensagem_admin: msgAdmin, mensagem_saulo: msgSaulo, mensagem_tulio: msgTulio }),
+      })
+      if (!res.ok) throw new Error('Erro ao salvar')
+      setCarta((prev) => ({ ...prev, mensagem_admin: msgAdmin, mensagem_saulo: msgSaulo, mensagem_tulio: msgTulio }))
+      setEditingMessages(false)
+    } catch {
+      setSaveError('Erro ao salvar. Tente novamente.')
+    } finally {
+      setSavingMessages(false)
+    }
+  }
 
   async function handleRefresh() {
     setRefreshing(true)
@@ -226,6 +251,51 @@ export default function AdminPanel({ carta: initialCarta }: Props) {
               done={contrib1.length > 0}
             />
           </div>
+        </div>
+
+        {/* Edição de mensagens fixas */}
+        <div className="card">
+          <div className="flex items-center justify-between mb-4">
+            <h3 className="font-bold text-apen-dark">Mensagens fixas</h3>
+            {!editingMessages ? (
+              <button onClick={() => setEditingMessages(true)} className="btn-secondary text-sm py-1.5 px-3">
+                ✏️ Editar
+              </button>
+            ) : (
+              <div className="flex gap-2">
+                <button onClick={() => { setEditingMessages(false); setSaveError('') }} className="btn-secondary text-sm py-1.5 px-3">
+                  Cancelar
+                </button>
+                <button onClick={handleSaveMessages} disabled={savingMessages} className="btn-primary text-sm py-1.5 px-3">
+                  {savingMessages ? 'Salvando...' : 'Salvar'}
+                </button>
+              </div>
+            )}
+          </div>
+
+          <div className="space-y-4">
+            {[
+              { label: 'Mayra Luna', value: msgAdmin, onChange: setMsgAdmin },
+              { label: 'Saulo Godoy', value: msgSaulo, onChange: setMsgSaulo },
+              { label: 'Túlio Cavalcanti', value: msgTulio, onChange: setMsgTulio },
+            ].map(({ label, value, onChange }) => (
+              <div key={label}>
+                <label className="label">{label}</label>
+                {editingMessages ? (
+                  <textarea
+                    value={value}
+                    onChange={(e) => onChange(e.target.value)}
+                    rows={4}
+                    className="input-field resize-y text-sm"
+                  />
+                ) : (
+                  <p className="text-sm text-gray-600 bg-gray-50 rounded-lg p-3 leading-relaxed">{value || <em className="text-gray-400">Sem mensagem</em>}</p>
+                )}
+              </div>
+            ))}
+          </div>
+
+          {saveError && <p className="text-red-600 text-sm mt-3">{saveError}</p>}
         </div>
 
         {/* Colaborador */}

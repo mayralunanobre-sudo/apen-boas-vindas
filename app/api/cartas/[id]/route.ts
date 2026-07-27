@@ -3,6 +3,21 @@ import { supabaseAdmin } from '@/lib/supabase-admin'
 
 export const dynamic = 'force-dynamic'
 
+export async function PATCH(request: Request, { params }: { params: { id: string } }) {
+  const body = await request.json()
+  const { mensagem_admin, mensagem_saulo, mensagem_tulio } = body
+
+  const { data, error } = await supabaseAdmin
+    .from('cartas')
+    .update({ mensagem_admin, mensagem_saulo, mensagem_tulio })
+    .eq('id', params.id)
+    .select()
+    .single()
+
+  if (error) return NextResponse.json({ error: error.message }, { status: 500 })
+  return NextResponse.json(data)
+}
+
 export async function GET(_req: Request, { params }: { params: { id: string } }) {
   // Busca por slug (links novos) ou por UUID (links antigos)
   const isUuid = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(params.id)
