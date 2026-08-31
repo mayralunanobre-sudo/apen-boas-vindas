@@ -28,7 +28,6 @@ export default function AdminPanel({ carta: initialCarta }: Props) {
   const [movingId, setMovingId] = useState<string | null>(null)
   const [refreshing, setRefreshing] = useState(false)
   const [editingMessages, setEditingMessages] = useState(false)
-  const [msgAdmin, setMsgAdmin] = useState(carta.mensagem_admin ?? '')
   const [msgSaulo, setMsgSaulo] = useState(carta.mensagem_saulo ?? '')
   const [msgTulio, setMsgTulio] = useState(carta.mensagem_tulio ?? '')
   const [savingMessages, setSavingMessages] = useState(false)
@@ -41,7 +40,7 @@ export default function AdminPanel({ carta: initialCarta }: Props) {
       const res = await fetch(`/api/cartas/${carta.id}`, {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ mensagem_admin: msgAdmin, mensagem_saulo: msgSaulo, mensagem_tulio: msgTulio }),
+        body: JSON.stringify({ mensagem_saulo: msgSaulo, mensagem_tulio: msgTulio }),
       })
       if (!res.ok) throw new Error('Erro ao salvar')
       setCarta((prev) => ({ ...prev, mensagem_admin: msgAdmin, mensagem_saulo: msgSaulo, mensagem_tulio: msgTulio }))
@@ -275,7 +274,6 @@ export default function AdminPanel({ carta: initialCarta }: Props) {
 
           <div className="space-y-4">
             {[
-              { label: 'Mayra Luna', value: msgAdmin, onChange: setMsgAdmin },
               { label: 'Saulo Godoy', value: msgSaulo, onChange: setMsgSaulo },
               { label: 'Túlio Cavalcanti', value: msgTulio, onChange: setMsgTulio },
             ].map(({ label, value, onChange }) => (

@@ -201,11 +201,24 @@ const PRINT_CSS = `
 
 export default function PreviewContent({ carta }: { carta: CartaComContribuicoes }) {
   const familyContribs = carta.contribuicoes.filter((c) => c.pagina === 2)
-  const apenContribs = carta.contribuicoes.filter((c) => c.pagina === 1)
   const allPhotos = familyContribs.flatMap((c) => c.fotos_familia_urls ?? [])
 
+  // Ordem fixa: Mayra → Priscilla → demais
+  const PRIORITY = ['mayra', 'priscilla']
+  const rawApenContribs = carta.contribuicoes.filter((c) => c.pagina === 1)
+  const apenContribs = [...rawApenContribs].sort((a, b) => {
+    const ai = PRIORITY.findIndex((n) => a.nome_remetente.toLowerCase().includes(n))
+    const bi = PRIORITY.findIndex((n) => b.nome_remetente.toLowerCase().includes(n))
+    return (ai === -1 ? 999 : ai) - (bi === -1 ? 999 : bi)
+  })
+
+  // Backward compat: cartas antigas têm mensagem_admin da Mayra como campo fixo
+  const hasMayraContrib = rawApenContribs.some((c) => c.nome_remetente.toLowerCase().includes('mayra'))
+  const legacyMayra = !hasMayraContrib && carta.mensagem_admin
+    ? [{ id: 'legacy-mayra', nome_remetente: 'Mayra Luna', cargo_remetente: 'Diretora de Operações', mensagem: carta.mensagem_admin, foto_remetente_url: '/images/mayra-luna.jpg', fotos_familia_urls: null, pagina: 1 as const, carta_id: carta.id, criado_em: '' }]
+    : []
+
   const fixedColleagues = [
-    { name: 'Mayra Luna', role: 'Diretora de Operações', message: carta.mensagem_admin, photo: '/images/mayra-luna.jpg' },
     { name: 'Túlio Cavalcanti', role: 'Diretor de Consultoria e Alocação', message: carta.mensagem_tulio, photo: '/images/tulio-cavalcanti.jpg' },
   ]
 
@@ -277,7 +290,7 @@ export default function PreviewContent({ carta }: { carta: CartaComContribuicoes
 
               <div className="intro-phrase">{INTRO_PHRASE}</div>
 
-              {/* Time Åpen */}
+              {/* Time Åpen: Túlio (fixo) → Mayra legacy → contribuições ordenadas */}
               <div className="colleague-list">
                 {fixedColleagues.map((c, i) => (
                   <div key={i} className="colleague-block">
@@ -291,7 +304,7 @@ export default function PreviewContent({ carta }: { carta: CartaComContribuicoes
                     </div>
                   </div>
                 ))}
-                {apenContribs.map((c) => (
+                {[...legacyMayra, ...apenContribs].map((c) => (
                   <div key={c.id} className="colleague-block">
                     <Avatar src={c.foto_remetente_url} name={c.nome_remetente} size="sm" />
                     <div className="colleague-body">
