@@ -204,11 +204,19 @@ export default function PreviewContent({ carta }: { carta: CartaComContribuicoes
   const allPhotos = familyContribs.flatMap((c) => c.fotos_familia_urls ?? [])
 
   // Ordem fixa: Mayra → Priscilla → demais
-  const PRIORITY = ['mayra', 'priscilla']
+  // Priscilla pode assinar como: Priscilla Moraes, Pix Moraes, Pix, Pri Moraes, Pri
+  function isPriscilla(nome: string) {
+    const n = nome.toLowerCase().trim()
+    return n.includes('priscilla') || n.includes('pix') || n === 'pri' || n.startsWith('pri ')  || n.includes('pri moraes')
+  }
+  const PRIORITY_FNS = [
+    (n: string) => n.toLowerCase().includes('mayra'),
+    isPriscilla,
+  ]
   const rawApenContribs = carta.contribuicoes.filter((c) => c.pagina === 1)
   const apenContribs = [...rawApenContribs].sort((a, b) => {
-    const ai = PRIORITY.findIndex((n) => a.nome_remetente.toLowerCase().includes(n))
-    const bi = PRIORITY.findIndex((n) => b.nome_remetente.toLowerCase().includes(n))
+    const ai = PRIORITY_FNS.findIndex((fn) => fn(a.nome_remetente))
+    const bi = PRIORITY_FNS.findIndex((fn) => fn(b.nome_remetente))
     return (ai === -1 ? 999 : ai) - (bi === -1 ? 999 : bi)
   })
 
